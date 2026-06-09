@@ -21,8 +21,8 @@ importers:
         specifier: ^0.170.0
         version: 0.170.0
       brushengine:
-        specifier: file:../brushengine
-        version: file:../brushengine(three@0.170.0)
+        specifier: file:vendor/brushengine-0.1.0.tgz
+        version: file:vendor/brushengine-0.1.0.tgz(three@0.170.0)
       react:
         specifier: ^19.0.0
         version: 19.2.7
@@ -493,8 +493,9 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
-  brushengine@file:../brushengine:
-    resolution: {directory: ../brushengine, type: directory}
+  brushengine@file:vendor/brushengine-0.1.0.tgz:
+    resolution: {integrity: sha512-wBMRpV1woUzA8+WDXhkTMZt5SanrLuRSBW2JcN0zApxP0txNQDHvr54l2E7NvXJtCyb+XT5DK2Td7m3Fo8sEWA==, tarball: file:vendor/brushengine-0.1.0.tgz}
+    version: 0.1.0
     peerDependencies:
       three: '>=0.160.0 <1'
 
@@ -1365,7 +1366,7 @@ snapshots:
       node-releases: 2.0.47
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
-  brushengine@file:../brushengine(three@0.170.0):
+  brushengine@file:vendor/brushengine-0.1.0.tgz(three@0.170.0):
     dependencies:
       three: 0.170.0
 
