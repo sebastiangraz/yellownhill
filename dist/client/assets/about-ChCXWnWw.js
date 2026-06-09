@@ -1,0 +1,1 @@
+import{i as e,n as t,r as n}from"./index-Dg29FdBy.js";var r=e(n(),1),i=t();function a(){let[e,t]=(0,r.useState)(0);return(0,i.jsxs)(`button`,{className:`increment`,onClick:()=>t(e+1),type:`button`,children:[`Clicks: `,e]})}function o(){return(0,i.jsxs)(`main`,{children:[(0,i.jsx)(`h1`,{children:`About`}),(0,i.jsx)(a,{})]})}export{o as component};
