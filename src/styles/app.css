@@ -2,6 +2,7 @@
   * {
     box-sizing: border-box;
     text-box: trim-both cap alphabetic;
+    -webkit-font-smoothing: antialiased;
     margin: 0;
     padding: 0;
   }
@@ -24,6 +25,10 @@
     grid-column: bleedstart / bleedend;
   }
   :is(h1, h2, h3, h4, h5, h6) {
+    font-variation-settings:
+      "opsz" 14,
+      "wdth" 50;
+    text-transform: uppercase;
     text-wrap: balance;
   }
   h2 {
@@ -47,7 +52,7 @@
     row-gap: 2rem;
   }
   .max-width-prose {
-    max-width: 50ch;
+    max-width: 48ch;
   }
   .center {
     justify-content: center;
