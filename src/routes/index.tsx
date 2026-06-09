@@ -12,9 +12,9 @@ function RouteComponent() {
       <section>
         <div className="startend gap-y-2 center px-4 grid">
           <h2>
-            Yellown Hill™ Strategic Capital
-            <br />
-            Relationships Across Borders.
+            Yellown Hill™ is a New York-based strategic capital platform focused
+            on infrastructure, energy, real assets, and cross-border capital
+            relationships.
           </h2>
           <p className="max-width-prose">
             Focused on infrastructure, energy, real assets, and long-term

@@ -57,16 +57,24 @@ export function CityParallax() {
         gridSize: number,
         heightPeak: number,
         partialBox: number = DEFAULT_CITY.partialBox,
+        guidelineLength: number = 0.6,
       ) => {
         // Dedupe on the EXACT param values. Resting/scroll calls pass exact values
         // and generate exactly (e.g. partialBox 0.8 — not a quantised 0.7916…). The
         // intro keeps the rebuild count bounded by quantising its PROGRESS instead
         // (see INTRO_STEPS in runIntro), which still lands on the exact endpoints.
-        const sig = `${seed}|${gridSize}|${heightPeak}|${partialBox}`;
+        const sig = `${seed}|${gridSize}|${heightPeak}|${partialBox}|${guidelineLength}`;
         if (sig === lastSig) return;
         lastSig = sig;
         engine.setStrokes(
-          cityScene({ ...DEFAULT_CITY, seed, gridSize, heightPeak, partialBox }),
+          cityScene({
+            ...DEFAULT_CITY,
+            seed,
+            gridSize,
+            heightPeak,
+            partialBox,
+            guidelineLength,
+          }),
         );
       };
 
@@ -75,7 +83,7 @@ export function CityParallax() {
       const SEEDS = [539, 12, 87, 204, 451, 76, 318, 9];
 
       // Start as a single short building; the intro grows it into a full city.
-      setCity(SEEDS[0], 1, 0, 0);
+      setCity(SEEDS[0], 1, 0, 0, 0);
 
       // Worm's-eye base camera that suits a skyline rising from a ground line.
       const base = {
@@ -88,11 +96,11 @@ export function CityParallax() {
       };
       engine.setProjection(base);
 
-      // Intro reveal: grow gridSize 1→6, heightPeak 0→1 and partialBox (half-drawn
-      // boxes) 0→0.8 over ~2s, once, when the band first enters view (time-based,
-      // not scroll-driven). gridSize and partialBox are structural, so each step
-      // reshuffles the linework — combined with the rising heightPeak it reads as
-      // the city building itself up.
+      // Intro reveal: over ~2s on first entering view (time-based, not scroll-
+      // driven) grow gridSize 1→6, heightPeak 0→1, partialBox (half-drawn boxes)
+      // 0→0.8 and guidelineLength 0→0.6. gridSize and partialBox are structural so
+      // each step reshuffles the linework; heightPeak and guidelineLength are pure
+      // multipliers that grow smoothly. Together it reads as the city building up.
       const INTRO_MS = 4000;
       const INTRO_STEPS = 24; // discrete geometry rebuilds across the reveal
       let introStarted = false;
@@ -138,6 +146,7 @@ export function CityParallax() {
           Math.max(1, Math.round(lerp(1, 6, qe))),
           lerp(0, 1, qe),
           lerp(0, 0.8, qe),
+          lerp(0, 0.6, qe),
         );
         apply(); // push the projection (origin.x = introOriginX) each intro frame
         if (e < 1) {
