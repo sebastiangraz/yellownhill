@@ -5,3 +5,10 @@ allowBuilds:
   '@parcel/watcher': true
   esbuild: true
   sharp: true
+
+# brushengine is a private, vendored tarball (file:vendor/brushengine-*.tgz) and
+# is never published to npm, so it can't pass the registry release-age check that
+# pnpm v11 enables by default (minimumReleaseAge = 1 day). Exempt it by name; all
+# real registry deps still get the supply-chain check.
+minimumReleaseAgeExclude:
+  - brushengine
