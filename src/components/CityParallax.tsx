@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./CityParallax.css";
 
-// A fixed, full-viewport brush-rendered cityscape whose vanishing points are
+// An in-flow brush-rendered cityscape whose vanishing points are
 // driven by scroll position — the camera lifts from a worm's-eye view toward
 // eye-level as the page scrolls.
 //
@@ -43,17 +43,20 @@ export function CityParallax() {
         zoom: 0.4,
       };
       engine.setProjection(base);
-      engine.start();
 
       const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
       const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
 
       let raf = 0;
-      // Map scroll progress (0 at top → 1 at bottom) onto the vanishing points.
+      // Progress as THIS element travels through the viewport: 0 when its top
+      // reaches the bottom edge, 1 when its bottom clears the top edge — so the
+      // parallax is relative to the band, not the document root.
       const apply = () => {
         raf = 0;
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        const t = clamp01(max > 0 ? window.scrollY / max : 0);
+        const rect = wrap.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        const span = vh + rect.height;
+        const t = clamp01(span > 0 ? (vh - rect.top) / span : 0);
         engine.setProjection({
           ...base,
           // VPs drop toward the horizon and pull inward: worm's-eye → eye-level.
@@ -73,12 +76,32 @@ export function CityParallax() {
         apply();
       });
       ro.observe(wrap);
-      window.addEventListener("scroll", onScroll, { passive: true });
-      apply();
+
+      // Only run the parallax (and the render loop) while the band is on screen.
+      let active = false;
+      const io = new IntersectionObserver((entries) => {
+        const visible = entries.some((e) => e.isIntersecting);
+        if (visible === active) return;
+        active = visible;
+        if (visible) {
+          engine.start();
+          window.addEventListener("scroll", onScroll, { passive: true });
+          apply();
+        } else {
+          window.removeEventListener("scroll", onScroll);
+          if (raf) {
+            cancelAnimationFrame(raf);
+            raf = 0;
+          }
+          engine.stop();
+        }
+      });
+      io.observe(wrap);
 
       cleanup = () => {
-        window.removeEventListener("scroll", onScroll);
+        io.disconnect();
         ro.disconnect();
+        window.removeEventListener("scroll", onScroll);
         if (raf) cancelAnimationFrame(raf);
         engine.dispose();
       };
