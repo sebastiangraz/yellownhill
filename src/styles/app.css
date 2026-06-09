@@ -10,8 +10,8 @@
     position: relative;
     margin: 0 auto;
     grid-template-columns:
-      [bleedstart] minmax(0, 1fr)
-      [start] minmax(0, 720px) [end] minmax(0, 1fr) [bleedend];
+      [bleedstart] minmax(24px, 1fr)
+      [start] minmax(256px, 720px) [end] minmax(24px, 1fr) [bleedend];
     & > * {
       grid-column: start / end;
     }
@@ -27,7 +27,7 @@
     text-wrap: balance;
   }
   h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     line-height: 1.12;
   }
   p {
@@ -96,6 +96,8 @@ body {
 
 nav {
   display: flex;
+  flex-wrap: wrap;
+  row-gap: 1rem;
   justify-content: space-between;
   align-items: center;
   padding: 4rem 0 2rem 0;

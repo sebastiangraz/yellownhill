@@ -32,6 +32,11 @@ export function CityParallax() {
         engine.dispose();
         return;
       }
+      engine.setGlobalStyle({
+        thicknessFalloff: 0,
+        brushOverride: 1,
+        inkBlend: true,
+      });
       const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
       const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
       const smooth = (x: number) => x * x * (3 - 2 * x); // smoothstep ease
@@ -96,7 +101,7 @@ export function CityParallax() {
           ...base,
           vpX: { x: 1.8, y: lerp(-1.5, -3.25, t) },
           vpZ: { x: -2.6, y: lerp(-1.5, -3.25, t) },
-          origin: { x: 1, y: lerp(-3, -2, t) },
+          origin: { x: 1, y: lerp(-3, -1.75, t) },
         });
 
         // After the reveal, scroll cycles the seed → a fresh full-city layout.
