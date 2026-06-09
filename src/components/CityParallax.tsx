@@ -39,22 +39,40 @@ export function CityParallax() {
       });
       const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
       const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
-      const smooth = (x: number) => x * x * (3 - 2 * x); // smoothstep ease
+      const smooth = (x: number) =>
+        x < 0.5
+          ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2
+          : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2;
 
-      // City regeneration. heightPeak, gridSize and seed all change the GEOMETRY,
-      // so each needs cityScene() + setStrokes() (which rebuilds the GPU buffers).
-      // Dedupe on a signature so repeated calls during animation only rebuild when
-      // something actually changed; heightPeak is quantised to keep the rebuild
-      // count sane while staying visually smooth.
+      //cubic ease
+
+      // City regeneration. seed, gridSize, heightPeak and partialBox all change
+      // the GEOMETRY, so each needs cityScene() + setStrokes() (which rebuilds the
+      // GPU buffers). Dedupe on a signature so repeated calls during animation only
+      // rebuild when something actually changed; the continuous params are quantised
+      // to keep the rebuild count sane while staying visually smooth.
       const PEAK_QUANT = 24;
       let lastSig = "";
-      const setCity = (seed: number, gridSize: number, heightPeak: number) => {
+      const setCity = (
+        seed: number,
+        gridSize: number,
+        heightPeak: number,
+        partialBox: number = DEFAULT_CITY.partialBox,
+      ) => {
         const peak = Math.round(heightPeak * PEAK_QUANT) / PEAK_QUANT;
-        const sig = `${seed}|${gridSize}|${peak}`;
+        const box = Math.round(partialBox * PEAK_QUANT) / PEAK_QUANT;
+        const sig = `${seed}|${gridSize}|${peak}|${box}`;
         if (sig === lastSig) return;
         lastSig = sig;
+        console.log(box);
         engine.setStrokes(
-          cityScene({ ...DEFAULT_CITY, seed, gridSize, heightPeak: peak }),
+          cityScene({
+            ...DEFAULT_CITY,
+            seed,
+            gridSize,
+            heightPeak: peak,
+            partialBox: box,
+          }),
         );
       };
 
@@ -63,7 +81,7 @@ export function CityParallax() {
       const SEEDS = [539, 12, 87, 204, 451, 76, 318, 9];
 
       // Start as a single short building; the intro grows it into a full city.
-      setCity(SEEDS[0], 1, 0);
+      setCity(SEEDS[0], 1, 0, 0);
 
       // Worm's-eye base camera that suits a skyline rising from a ground line.
       const base = {
@@ -76,15 +94,17 @@ export function CityParallax() {
       };
       engine.setProjection(base);
 
-      // Intro reveal: grow gridSize 1→6 and heightPeak 0→1 over ~2s, once, when
-      // the band first enters view (time-based, not scroll-driven). gridSize is a
-      // structural param so each step reshuffles the layout — combined with the
-      // rising heightPeak it reads as the city building itself up.
-      const INTRO_MS = 2000;
+      // Intro reveal: grow gridSize 1→6, heightPeak 0→1 and partialBox (half-drawn
+      // boxes) 0→0.8 over ~2s, once, when the band first enters view (time-based,
+      // not scroll-driven). gridSize and partialBox are structural, so each step
+      // reshuffles the linework — combined with the rising heightPeak it reads as
+      // the city building itself up.
+      const INTRO_MS = 4000;
       let introStarted = false;
       let introDone = false;
       let introRaf = 0;
       let introT0 = 0;
+      let introOriginX = base.origin.x; // intro pans origin.x from -1 → 1
 
       let raf = 0;
       // Progress as THIS element travels through the viewport: 0 when its top
@@ -101,7 +121,7 @@ export function CityParallax() {
           ...base,
           vpX: { x: 1.8, y: lerp(-1.5, -3.25, t) },
           vpZ: { x: -2.6, y: lerp(-1.5, -3.25, t) },
-          origin: { x: 1, y: lerp(-3, -1.75, t) },
+          origin: { x: introOriginX, y: lerp(-3, -1.75, t) },
         });
 
         // After the reveal, scroll cycles the seed → a fresh full-city layout.
@@ -114,7 +134,14 @@ export function CityParallax() {
       const runIntro = (ts: number) => {
         if (!introT0) introT0 = ts;
         const e = smooth(clamp01((ts - introT0) / INTRO_MS));
-        setCity(SEEDS[0], Math.max(1, Math.round(lerp(1, 6, e))), e);
+        introOriginX = lerp(-1, 1, e); // pan the origin across during the reveal
+        setCity(
+          SEEDS[0],
+          Math.max(1, Math.round(lerp(1, 6, e))),
+          e,
+          lerp(0, 0.8, e),
+        );
+        apply(); // push the projection (origin.x = introOriginX) each intro frame
         if (e < 1) {
           introRaf = requestAnimationFrame(runIntro);
         } else {
