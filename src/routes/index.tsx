@@ -8,8 +8,8 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   return (
     <>
-      <div className="parallax-page">
-        <section className="parallax-panel">
+      <main>
+        <section>
           <p className="tag">Yellownhill</p>
           <h1>A city drawn in two-point perspective.</h1>
           <p>
@@ -19,25 +19,25 @@ function RouteComponent() {
           </p>
         </section>{" "}
         <CityParallax />
-        <section className="parallax-panel right">
+        <section>
           <h2>Generative</h2>
           <p>
             The whole skyline is a pure function of a seed — reproducible,
             tweakable, and rendered live in WebGL.
           </p>
         </section>
-        <section className="parallax-panel">
+        <section>
           <h2>Hand-drawn ink</h2>
           <p>
             Overlapping strokes multiply like real ink on a transparent canvas,
             so the page shows through and crossings darken.
           </p>
         </section>
-        <section className="parallax-panel right">
+        <section>
           <h2>Keep scrolling</h2>
           <p>The vanishing points have come to rest at eye level.</p>
         </section>
-      </div>
+      </main>
     </>
   );
 }

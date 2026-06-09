@@ -1,8 +1,12 @@
 .city-canvas {
   position: relative;
+  place-self: center;
   width: 100%;
-  height: 100vh;
+  max-width: 800px;
+  height: 100%;
+  aspect-ratio: 1;
   pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(249, 63, 63, 0.1);
 }
 
 .city-canvas canvas {
@@ -12,15 +16,16 @@
 }
 
 /* Scrolling content rendered above the canvas. */
-.parallax-page {
+main {
   position: relative;
+  display: grid;
   z-index: 1;
-  /* Paper tone — the ink-blend canvas is transparent, so this shows through. */
-  background: transparent;
-  color: #1a1a1a;
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.parallax-panel {
+section {
   min-height: 70vh;
   display: flex;
   flex-direction: column;
