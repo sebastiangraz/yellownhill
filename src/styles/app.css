@@ -20,7 +20,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding: 1em; */
+  padding: 4rem 0 2rem 0;
 }
 
 nav svg {
