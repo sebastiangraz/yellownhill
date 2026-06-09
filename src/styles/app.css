@@ -1,4 +1,71 @@
-/* Forma DJR — variable font (weight axis). Served from public/fonts. */
+@layer base {
+  * {
+    box-sizing: border-box;
+    text-box: trim-both cap alphabetic;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    display: grid;
+    position: relative;
+    margin: 0 auto;
+    grid-template-columns:
+      [bleedstart] minmax(0, 1fr)
+      [start] minmax(0, 720px) [end] minmax(0, 1fr) [bleedend];
+    & > * {
+      grid-column: start / end;
+    }
+  }
+  .startend {
+    grid-column: start / end;
+  }
+
+  .bleed {
+    grid-column: bleedstart / bleedend;
+  }
+  :is(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+  }
+  h2 {
+    font-size: 2rem;
+    line-height: 1.12;
+  }
+  p {
+    font-family: "Affairs", Georgia, "Times New Roman", serif;
+    text-wrap: balance;
+  }
+}
+
+@layer utilities {
+  .grid {
+    display: grid;
+  }
+  .gap-y-1 {
+    row-gap: 1rem;
+  }
+  .gap-y-2 {
+    row-gap: 2rem;
+  }
+  .max-width-prose {
+    max-width: 50ch;
+  }
+  .center {
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+  }
+  .px-2 {
+    padding-block: 2rem;
+  }
+  .px-3 {
+    padding-block: 4rem;
+  }
+  .px-4 {
+    padding-block: 6rem;
+  }
+}
+
 @font-face {
   font-family: "Forma DJR";
   src: url("/fonts/FormaDJR.woff2") format("woff2");
@@ -16,12 +83,6 @@
   font-display: swap;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   font-family:
     "Forma DJR",
@@ -30,23 +91,7 @@ body {
     BlinkMacSystemFont,
     sans-serif;
   background: #dfdfdc;
-}
-
-/* Body copy uses Affairs; everything else stays on Forma DJR. */
-p {
-  font-family: "Affairs", Georgia, "Times New Roman", serif;
-}
-
-.startend {
-  grid-column: start / end;
-}
-
-.bleed {
-  grid-column: bleedstart / bleedend;
-}
-
-.navigation {
-  border-bottom: 1px solid #0001;
+  line-height: 1.5;
 }
 
 nav {
@@ -56,30 +101,42 @@ nav {
   padding: 4rem 0 2rem 0;
 }
 
+.navigation {
+  border-bottom: 1px solid #0001;
+}
+
 nav svg {
   width: 180px;
   height: auto;
   overflow: visible;
 }
 
-.container {
-  display: grid;
-  position: relative;
-  /* max-width: 720px;
-  width: calc(100% - 4rem); */
-  margin: 0 auto;
-  grid-template-columns: [bleedstart] 1fr [start] 720px [end] 1fr [bleedend];
-  & > * {
-    grid-column: start / end;
-  }
-}
 section {
-  min-height: 30vh;
+  grid-column: bleedstart / bleedend;
+  grid-template-columns: subgrid;
   display: grid;
-  flex-direction: column;
-  justify-content: center;
-  align-items: start;
-  text-align: left;
-  gap: 2rem;
-  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid #0001;
+}
+
+button {
+  appearance: none;
+  font-family: inherit;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 450;
+  line-height: 1.25;
+  background: #000;
+  color: #fff;
+  padding: 0.6rem 0.65rem;
+  border-radius: 99em;
+  border: none;
+  cursor: pointer;
+  width: calc-size(max-content, round(up, size, 0.5rlh));
+  font-variation-settings: "opsz" 8;
+
+  transition: opacity 0.2s ease;
+  &:hover {
+    opacity: 0.84;
+  }
 }
