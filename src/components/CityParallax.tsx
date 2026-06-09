@@ -40,7 +40,7 @@ export function CityParallax() {
         origin: { x: 1, y: -1.5 },
         perspective: 0.75,
         verticalScale: 1.5,
-        zoom: 0.6,
+        zoom: 0.55,
       };
       engine.setProjection(base);
 

@@ -8,20 +8,18 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   return (
     <>
-      <main>
-        <CityParallax />
-        <section>
-          <h2>
-            Yellown Hill™ is a strategic capital platform focused on
-            infrastructure, energy, real assets, and cross-border capital
-            relationships.
-          </h2>
-          <p>
-            The platform is oriented toward long-term institutional
-            relationships and strategic transactions across global markets.
-          </p>
-        </section>
-      </main>
+      <CityParallax />
+      <section>
+        <h2>
+          Yellown Hill™ is a strategic capital platform focused on
+          infrastructure, energy, real assets, and cross-border capital
+          relationships.
+        </h2>
+        <p>
+          The platform is oriented toward long-term institutional relationships
+          and strategic transactions across global markets.
+        </p>
+      </section>
     </>
   );
 }

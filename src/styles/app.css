@@ -12,8 +12,18 @@ body {
 }
 
 main {
-  text-align: center;
-  margin: 0 auto;
+}
+
+.startend {
+  grid-column: start / end;
+}
+
+.bleed {
+  grid-column: bleedstart / bleedend;
+}
+
+.navigation {
+  border-bottom: 1px solid #0001;
 }
 
 nav {
@@ -30,16 +40,23 @@ nav svg {
 }
 
 .container {
+  display: grid;
   position: relative;
-  max-width: 720px;
-  width: calc(100% - 4rem);
+  /* max-width: 720px;
+  width: calc(100% - 4rem); */
   margin: 0 auto;
+  grid-template-columns: [bleedstart] 1fr [start] 720px [end] 1fr [bleedend];
+  & > * {
+    grid-column: start / end;
+  }
 }
 section {
   min-height: 30vh;
-  display: flex;
+  display: grid;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  text-align: center;
+  align-items: start;
+  text-align: left;
+  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
 }

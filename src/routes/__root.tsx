@@ -32,7 +32,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <div className="container">
+        <div className="container navigation">
           <nav>
             <Logo />
             <p>New York, NY 10022</p>
