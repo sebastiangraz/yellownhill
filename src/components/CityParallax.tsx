@@ -94,9 +94,9 @@ export function CityParallax() {
         // Vanishing points — cheap projection tweak, every frame.
         engine.setProjection({
           ...base,
-          vpX: { x: 1.8, y: lerp(-1.5, -3, t) },
-          vpZ: { x: -2.6, y: lerp(-1.5, -3, t) },
-          origin: { x: 1, y: lerp(-3, -1, t) },
+          vpX: { x: 1.8, y: lerp(-1.5, -3.25, t) },
+          vpZ: { x: -2.6, y: lerp(-1.5, -3.25, t) },
+          origin: { x: 1, y: lerp(-3, -2, t) },
         });
 
         // After the reveal, scroll cycles the seed → a fresh full-city layout.
