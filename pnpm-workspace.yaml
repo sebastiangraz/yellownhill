@@ -1,4 +1,7 @@
+# Allow these dependencies to run their install/build scripts (pnpm v11 blocks
+# them by default). esbuild needs its postinstall to fetch its native binary,
+# without which the Vite build fails.
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  esbuild: set this to true or false
-  sharp: set this to true or false
+  '@parcel/watcher': true
+  esbuild: true
+  sharp: true

@@ -10,5 +10,5 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
-  plugins: [tanstackStart(), viteReact(), netlify()],
+  plugins: [tanstackStart(), netlify(), viteReact()],
 });
