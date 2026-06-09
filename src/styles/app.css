@@ -1,3 +1,21 @@
+/* Forma DJR — variable font (weight axis). Served from public/fonts. */
+@font-face {
+  font-family: "Forma DJR";
+  src: url("/fonts/FormaDJR.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Affairs — static regular weight. Served from public/fonts. */
+@font-face {
+  font-family: "Affairs";
+  src: url("/fonts/Affairs-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,12 +24,17 @@
 
 body {
   font-family:
-    Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+    "Forma DJR",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
     sans-serif;
   background: #dfdfdc;
 }
 
-main {
+/* Body copy uses Affairs; everything else stays on Forma DJR. */
+p {
+  font-family: "Affairs", Georgia, "Times New Roman", serif;
 }
 
 .startend {
