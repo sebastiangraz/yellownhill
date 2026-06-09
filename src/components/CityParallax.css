@@ -1,71 +1,15 @@
 .city-canvas {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  aspect-ratio: 6/10;
+  margin: 0 auto;
   pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(249, 63, 63, 0.1);
 }
 
 .city-canvas canvas {
   display: block;
   width: 100%;
   height: 100%;
-}
-
-/* Scrolling content rendered above the canvas. */
-.parallax-page {
-  position: relative;
-  z-index: 1;
-  /* Paper tone — the ink-blend canvas is transparent, so this shows through. */
-  background: transparent;
-  color: #1a1a1a;
-}
-
-.parallax-panel {
-  min-height: 70vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(1.5rem, 6vw, 6rem);
-  box-sizing: border-box;
-}
-
-.parallax-panel.right {
-  align-items: flex-end;
-  text-align: right;
-}
-
-.parallax-panel h1 {
-  font-size: clamp(2.5rem, 8vw, 6rem);
-  line-height: 0.95;
-  margin: 0 0 1rem;
-  letter-spacing: -0.02em;
-  max-width: 14ch;
-}
-
-.parallax-panel h2 {
-  font-size: clamp(1.75rem, 4vw, 3rem);
-  margin: 0 0 0.75rem;
-  letter-spacing: -0.01em;
-}
-
-.parallax-panel p {
-  font-size: clamp(1rem, 1.6vw, 1.25rem);
-  line-height: 1.5;
-  max-width: 42ch;
-  margin: 0;
-  color: #333;
-}
-
-.parallax-panel .tag {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: #c43041;
-  margin: 0 0 1rem;
-}
-
-/* Cream backdrop painted behind the transparent ink canvas. */
-html {
-  background: #f4f1ea;
 }

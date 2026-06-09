@@ -35,12 +35,12 @@ export function CityParallax() {
       // Worm's-eye base camera that suits a skyline rising from a ground line
       // (matches the playground's city view) — this is the t=0 (top) state.
       const base = {
-        vpX: { x: 2.2, y: -2 },
-        vpZ: { x: -2.2, y: -2 },
-        origin: { x: 0.5, y: -2 },
+        vpX: { x: 1.8, y: -1.5 },
+        vpZ: { x: -2.6, y: -1.5 },
+        origin: { x: 1, y: -1.5 },
         perspective: 0.75,
         verticalScale: 1.5,
-        zoom: 0.4,
+        zoom: 0.6,
       };
       engine.setProjection(base);
 
@@ -60,10 +60,11 @@ export function CityParallax() {
         engine.setProjection({
           ...base,
           // VPs drop toward the horizon and pull inward: worm's-eye → eye-level.
-          vpX: { x: lerp(2.2, 1.25, t), y: lerp(-2, -0.55, t) },
-          vpZ: { x: lerp(-2.2, -1.25, t), y: lerp(-2, -0.55, t) },
-          origin: { x: lerp(0.5, 0, t), y: lerp(-2, -0.5, t) },
-          zoom: lerp(0.4, 0.4, t),
+          vpX: { x: 1.8, y: lerp(-1.5, -3, t) },
+          vpZ: { x: -2.6, y: lerp(-1.5, -3, t) },
+          origin: { x: 1, y: lerp(-3, -1, t) },
+          // verticalScale: lerp(1.5, 1.3, t),
+          // zoom: lerp(0.4, 0.4, t),
         });
       };
       const onScroll = () => {
