@@ -51,7 +51,6 @@ export function CityParallax() {
       // GPU buffers). Dedupe on a signature so repeated calls during animation only
       // rebuild when something actually changed; the continuous params are quantised
       // to keep the rebuild count sane while staying visually smooth.
-      const PEAK_QUANT = 24;
       let lastSig = "";
       const setCity = (
         seed: number,
@@ -59,20 +58,15 @@ export function CityParallax() {
         heightPeak: number,
         partialBox: number = DEFAULT_CITY.partialBox,
       ) => {
-        const peak = Math.round(heightPeak * PEAK_QUANT) / PEAK_QUANT;
-        const box = Math.round(partialBox * PEAK_QUANT) / PEAK_QUANT;
-        const sig = `${seed}|${gridSize}|${peak}|${box}`;
+        // Dedupe on the EXACT param values. Resting/scroll calls pass exact values
+        // and generate exactly (e.g. partialBox 0.8 — not a quantised 0.7916…). The
+        // intro keeps the rebuild count bounded by quantising its PROGRESS instead
+        // (see INTRO_STEPS in runIntro), which still lands on the exact endpoints.
+        const sig = `${seed}|${gridSize}|${heightPeak}|${partialBox}`;
         if (sig === lastSig) return;
         lastSig = sig;
-        console.log(box);
         engine.setStrokes(
-          cityScene({
-            ...DEFAULT_CITY,
-            seed,
-            gridSize,
-            heightPeak: peak,
-            partialBox: box,
-          }),
+          cityScene({ ...DEFAULT_CITY, seed, gridSize, heightPeak, partialBox }),
         );
       };
 
@@ -100,6 +94,7 @@ export function CityParallax() {
       // reshuffles the linework — combined with the rising heightPeak it reads as
       // the city building itself up.
       const INTRO_MS = 4000;
+      const INTRO_STEPS = 24; // discrete geometry rebuilds across the reveal
       let introStarted = false;
       let introDone = false;
       let introRaf = 0;
@@ -135,11 +130,14 @@ export function CityParallax() {
         if (!introT0) introT0 = ts;
         const e = smooth(clamp01((ts - introT0) / INTRO_MS));
         introOriginX = lerp(-1, 1, e); // pan the origin across during the reveal
+        // Quantise PROGRESS (not the values) so geometry rebuilds a bounded number
+        // of times yet still hits the exact endpoints at qe = 0 and qe = 1.
+        const qe = Math.round(e * INTRO_STEPS) / INTRO_STEPS;
         setCity(
           SEEDS[0],
-          Math.max(1, Math.round(lerp(1, 6, e))),
-          e,
-          lerp(0, 0.8, e),
+          Math.max(1, Math.round(lerp(1, 6, qe))),
+          lerp(0, 1, qe),
+          lerp(0, 0.8, qe),
         );
         apply(); // push the projection (origin.x = introOriginX) each intro frame
         if (e < 1) {
