@@ -10,14 +10,10 @@ function RouteComponent() {
     <>
       <CityParallax />
       <section>
-        <h2>
-          Yellown Hill™ is a strategic capital platform focused on
-          infrastructure, energy, real assets, and cross-border capital
-          relationships.
-        </h2>
+        <h2>Yellown Hill™ Strategic Capital Relationships Across Borders.</h2>
         <p>
-          The platform is oriented toward long-term institutional relationships
-          and strategic transactions across global markets.
+          Focused on infrastructure, energy, real assets, and long-term
+          institutional relationships.
         </p>
       </section>
     </>
