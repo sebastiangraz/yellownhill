@@ -13,6 +13,10 @@ import appCss from "~/styles/app.css?url";
 export const Route = createRootRoute({
   head: () => ({
     links: [{ rel: "stylesheet", href: appCss }],
+    meta: [
+      { name: "description", content: "Yellown Hill" },
+      { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+    ],
   }),
   component: RootComponent,
 });
