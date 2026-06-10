@@ -22,19 +22,37 @@ export function CityParallax() {
     let cleanup = () => {};
 
     void (async () => {
-      const { BrushEngine, loadBrushTextures, cityScene, DEFAULT_CITY } =
-        await import("brushengine");
+      const {
+        BrushEngine,
+        loadBrushTextures,
+        cityScene,
+        DEFAULT_CITY,
+        BRUSH_DATA_URIS,
+      } = await import("brushengine");
       if (disposed) return;
 
+      // Brushes are referenced by numeric index. We keep the package's built-in
+      // brushes (BRUSH_DATA_URIS = indices 0,1) and append our own stroke served
+      // from yellownhill's /public — so the custom brush is the last index. Edit
+      // public/brushes/custom.svg to change it; the file is loaded at runtime, no
+      // brushengine rebuild needed.
+      const brushUrls = [...BRUSH_DATA_URIS, "/brushes/custom.svg"];
+      const customBrush = brushUrls.length - 1;
+
+      // Global stroke-width multiplier. brushengine bakes width into each stroke
+      // (style.widthPx) and has no global knob, so we scale every stroke after
+      // cityScene() generates it. 1 = engine defaults; >1 thicker, <1 thinner.
+      const STROKE_WIDTH_SCALE: number = 0.7;
+
       const engine = new BrushEngine(canvas);
-      engine.setBrushes(await loadBrushTextures());
+      engine.setBrushes(await loadBrushTextures(brushUrls));
       if (disposed) {
         engine.dispose();
         return;
       }
       engine.setGlobalStyle({
         thicknessFalloff: 0,
-        brushOverride: 1,
+        brushOverride: customBrush,
         inkBlend: true,
       });
       const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -66,16 +84,18 @@ export function CityParallax() {
         const sig = `${seed}|${gridSize}|${heightPeak}|${partialBox}|${guidelineLength}`;
         if (sig === lastSig) return;
         lastSig = sig;
-        engine.setStrokes(
-          cityScene({
-            ...DEFAULT_CITY,
-            seed,
-            gridSize,
-            heightPeak,
-            partialBox,
-            guidelineLength,
-          }),
-        );
+        const strokes = cityScene({
+          ...DEFAULT_CITY,
+          seed,
+          gridSize,
+          heightPeak,
+          partialBox,
+          guidelineLength,
+        });
+        if (STROKE_WIDTH_SCALE !== 1) {
+          for (const s of strokes) s.style.widthPx *= STROKE_WIDTH_SCALE;
+        }
+        engine.setStrokes(strokes);
       };
 
       // Seeds cycled while scrolling past. Index 0 is what the intro grows into,
@@ -92,7 +112,7 @@ export function CityParallax() {
         origin: { x: 1, y: -1.5 },
         perspective: 0.75,
         verticalScale: 1.5,
-        zoom: 0.55,
+        zoom: 0.4,
       };
       engine.setProjection(base);
 
@@ -122,9 +142,9 @@ export function CityParallax() {
         // Vanishing points — cheap projection tweak, every frame.
         engine.setProjection({
           ...base,
-          vpX: { x: 1.8, y: lerp(-1.5, -3.25, t) },
-          vpZ: { x: -2.6, y: lerp(-1.5, -3.25, t) },
-          origin: { x: introOriginX, y: lerp(-3, -1.75, t) },
+          vpX: { x: 1.6, y: lerp(-1.5, -3.5, t) },
+          vpZ: { x: -3, y: lerp(-1.5, -3.5, t) },
+          origin: { x: introOriginX, y: lerp(-3, -2, t) },
         });
 
         // After the reveal, scroll cycles the seed → a fresh full-city layout.
