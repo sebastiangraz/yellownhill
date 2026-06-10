@@ -21,8 +21,8 @@ importers:
         specifier: ^0.170.0
         version: 0.170.0
       brushengine:
-        specifier: ^0.1.1
-        version: 0.1.1(three@0.170.0)
+        specifier: ^0.1.2
+        version: 0.1.2(three@0.170.0)
       react:
         specifier: ^19.0.0
         version: 19.2.7
@@ -1412,8 +1412,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
-  brushengine@0.1.1:
-    resolution: {integrity: sha512-diT3V3BiKwwvpvzBVHE5Ix2UH/WfSxjnIiBT16+0dDtUjQBmNySV03xLKdhQQeEoODx7s/pCyzCg+vWMYBb1og==}
+  brushengine@0.1.2:
+    resolution: {integrity: sha512-5Irq7EeRasu/bdn7tKrhm57NXajZKTBcLoolI9CJHXSZOuicG9NNejDlnN4H/RBkiRfM8Gi/Cev685EMPAVLBA==}
     peerDependencies:
       three: '>=0.160.0 <1'
 
@@ -5032,7 +5032,7 @@ snapshots:
       node-releases: 2.0.47
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
-  brushengine@0.1.1(three@0.170.0):
+  brushengine@0.1.2(three@0.170.0):
     dependencies:
       three: 0.170.0
 
