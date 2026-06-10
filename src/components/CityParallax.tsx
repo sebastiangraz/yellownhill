@@ -28,7 +28,20 @@ export function CityParallax() {
         cityScene,
         DEFAULT_CITY,
         BRUSH_DATA_URIS,
+        PALETTE,
       } = await import("brushengine");
+
+      // Override the library's built-in ink palette. PALETTE is the same object
+      // reference used internally by cityScene, so mutating its properties here
+      // (before any cityScene call) is enough — no library patching required.
+      PALETTE.yellow = "#f5a623";
+      PALETTE.red = "#418015";
+      PALETTE.teal = "#2d7dd2";
+
+      // Other options:
+      // PALETTE.yellow = "#f5a623";
+      // PALETTE.red = "#418015";
+      // PALETTE.teal = "#2d7dd2";
       if (disposed) return;
 
       // Brushes are referenced by numeric index. We keep the package's built-in
