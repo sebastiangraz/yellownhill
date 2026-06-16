@@ -35,7 +35,8 @@
     font-size: 1.5rem;
     line-height: 1.12;
   }
-  p {
+  p,
+  span {
     font-family: "Affairs", Georgia, "Times New Roman", serif;
     text-wrap: balance;
   }
@@ -69,6 +70,110 @@
   .px-4 {
     padding-block: 6rem;
   }
+  .badge {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .emphasis {
+    font-style: italic;
+  }
+  hr {
+    border: none;
+    border-top: 1px solid #0001;
+    width: 100%;
+  }
+  .small {
+    font-size: 0.8125rem;
+  }
+  .secondary {
+    opacity: 0.6;
+  }
+}
+
+@layer components {
+  .mono {
+    font-family: "Affairs Mono", monospace;
+    text-transform: uppercase;
+  }
+  .columns {
+    display: grid;
+    grid-auto-flow: column;
+  }
+
+  .columns[style*="--min-width"] {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(var(--min-width, 32ch), 1fr)
+    );
+  }
+  .rows {
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: max-content;
+  }
+
+  *[data-gap] {
+    --row-gap: 3rem;
+    --column-gap: 3rem;
+
+    &:is(.rows) {
+      row-gap: var(--row-gap);
+    }
+    &:is(.columns) {
+      column-gap: var(--column-gap);
+    }
+
+    &[data-gap="0"] {
+      --row-gap: 0;
+      --column-gap: 0;
+    }
+    &[data-gap="1"] {
+      --row-gap: 1.5rem;
+      --column-gap: 1.5rem;
+    }
+    &[data-gap="2"] {
+      --row-gap: 3rem;
+      --column-gap: 3rem;
+    }
+    &[data-gap="3"] {
+      --row-gap: 6rem;
+      --column-gap: 6rem;
+    }
+  }
+  .contact-form {
+    display: grid;
+    row-gap: 1rem;
+    width: 100%;
+    text-align: left;
+
+    & input,
+    & textarea {
+      appearance: none;
+      font-family: inherit;
+      font-size: 1rem;
+      width: 100%;
+      padding: 0.75rem 0.85rem;
+      background: transparent;
+      border: 1px solid #0002;
+      border-radius: 0.25rem;
+      color: inherit;
+      resize: vertical;
+
+      &::placeholder {
+        color: #0007;
+      }
+      &:focus-visible {
+        outline: none;
+        border-color: #000;
+      }
+    }
+
+    & button {
+      justify-self: start;
+    }
+  }
 }
 
 @font-face {
@@ -88,6 +193,20 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Affairs";
+  src: url("/fonts/Affairs-Italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Affairs Mono";
+  src: url("/fonts/Affairs-Mono.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 body {
   font-family:
     "Forma DJR",
@@ -105,7 +224,7 @@ nav {
   row-gap: 1rem;
   justify-content: space-between;
   align-items: center;
-  padding: 4rem 0 2rem 0;
+  padding: 4rem 1rem 2rem 1rem;
 }
 
 .navigation {
@@ -123,6 +242,7 @@ section {
   grid-template-columns: subgrid;
   display: grid;
   border-top: 1px solid #0001;
+  justify-items: center;
 }
 
 button {
