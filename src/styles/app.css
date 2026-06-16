@@ -36,10 +36,12 @@
     font-size: 1.5rem;
     line-height: 1.12;
   }
-  p,
-  span {
+  p {
     font-family: "Affairs", Georgia, "Times New Roman", serif;
     text-wrap: balance;
+  }
+  .serif {
+    font-family: "Affairs", Georgia, "Times New Roman", serif;
   }
 }
 
@@ -72,6 +74,7 @@
     padding-block: 6rem;
   }
   .badge {
+    font-family: "Affairs", Georgia, "Times New Roman", serif;
     font-size: 0.8125rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -194,13 +197,12 @@
     & input,
     & textarea {
       appearance: none;
-      font-family: inherit;
-      font-size: 1rem;
+      font-family: "Affairs", Georgia, "Times New Roman", serif;
+      font-size: 0.875rem;
       width: 100%;
       padding: 0.75rem 0.85rem;
       background: transparent;
       border: 1px solid #0002;
-      border-radius: 0.25rem;
       color: inherit;
       resize: vertical;
 

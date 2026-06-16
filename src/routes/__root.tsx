@@ -39,7 +39,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <div className="container navigation">
           <nav>
             <Logo />
-            <p>New York, NY 10022</p>
+            <span className="badge">New York, NY 10022</span>
           </nav>
         </div>
 

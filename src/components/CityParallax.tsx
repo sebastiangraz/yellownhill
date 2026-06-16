@@ -182,7 +182,7 @@ export function CityParallax() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="hero-canvas" aria-hidden="true">
+    <div ref={wrapRef} className="hero-canvas fade-starting" aria-hidden="true">
       <canvas ref={canvasRef} />
     </div>
   );

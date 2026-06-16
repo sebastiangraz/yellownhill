@@ -7,7 +7,6 @@
 }
 
 .hero-heading {
-  opacity: 0;
   padding-block: 1rem;
   padding-inline: 1rem;
   place-self: start start;
@@ -20,19 +19,22 @@
   max-width: 20ch;
   mix-blend-mode: multiply;
   text-transform: uppercase;
-  transition: opacity 0.3s ease-in-out allow-discrete;
   @media (max-width: 480px) {
     font-size: 2.5rem;
   }
 }
 
+.fade-starting {
+  opacity: 1;
+  transition:
+    opacity 2s ease-in-out allow-discrete,
+    content-visibility 2s ease-in-out allow-discrete;
+}
+
 @starting-style {
-  .hero-heading {
+  .fade-starting {
+    opacity: 0; /* ← where it begins */
     content-visibility: hidden;
-    opacity: 0;
-    transition:
-      opacity 0.3s ease-in-out allow-discrete,
-      content-visibility 0.3s ease-in-out allow-discrete;
   }
 }
 

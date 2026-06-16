@@ -11,12 +11,14 @@ function RouteComponent() {
       {/* Hero */}
       <div className="hero">
         <CityParallax />
-        <h1
-          className="hero-heading fade-parallax"
-          style={{ "--fade-inset": "10%" } as React.CSSProperties}
-        >
-          Strategic Capital Relationships Across Borders.
-        </h1>{" "}
+        <div className="fade-starting">
+          <h1
+            className="hero-heading fade-parallax"
+            style={{ "--fade-inset": "10%" } as React.CSSProperties}
+          >
+            Strategic Capital Relationships Across Borders.
+          </h1>{" "}
+        </div>
         <p
           className="hero-subtitle small fade-parallax"
           style={{ "--fade-inset": "20%" } as React.CSSProperties}
@@ -111,9 +113,8 @@ function RouteComponent() {
         <div className="startend gap-y-2 center px-4 grid">
           <h2>Request a Conversation</h2>
           <p className="max-width-prose">
-            Ray Gelbberg, Founder — New York, NY 10022
+            Ray Gelbberg · Founder, New York, NY 10022
           </p>
-          {/* Contact form — placeholder markup only, not wired up yet */}
           <form
             className="contact-form max-width-prose"
             onSubmit={(e) => e.preventDefault()}
