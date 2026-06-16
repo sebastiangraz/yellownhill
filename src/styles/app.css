@@ -19,6 +19,7 @@
   }
   .startend {
     grid-column: start / end;
+    container-type: inline-size;
   }
 
   .bleed {
@@ -101,12 +102,22 @@
     grid-auto-flow: column;
   }
 
-  .columns[style*="--min-width"] {
+  .columns[style*="--columns"] {
     grid-auto-flow: row;
     grid-template-columns: repeat(
-      auto-fit,
-      minmax(var(--min-width, 32ch), 1fr)
+      var(--_columns, var(--columns, 4)),
+      minmax(0, 1fr)
     );
+  }
+  @container (max-width: 40rem) {
+    .columns[style*="--columns"] {
+      --_columns: 2;
+    }
+  }
+  @container (max-width: 24rem) {
+    .columns[style*="--columns"] {
+      --_columns: 1;
+    }
   }
   .rows {
     display: grid;
@@ -142,6 +153,35 @@
       --column-gap: 6rem;
     }
   }
+  .fade-parallax {
+    --fade-min: 0;
+
+    animation: fade-parallax linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+
+  @keyframes fade-parallax {
+    entry 0% {
+      opacity: 0;
+    }
+    entry 50% {
+      opacity: 0;
+    }
+    entry 100% {
+      opacity: 1;
+    }
+    exit 0% {
+      opacity: 1;
+    }
+    exit 50% {
+      opacity: 0;
+    }
+    exit 100% {
+      opacity: 0;
+    }
+  }
+
   .contact-form {
     display: grid;
     row-gap: 1rem;
@@ -242,7 +282,6 @@ section {
   grid-template-columns: subgrid;
   display: grid;
   border-top: 1px solid #0001;
-  justify-items: center;
 }
 
 button {

@@ -14,7 +14,7 @@ function RouteComponent() {
         <h1 className="hero-heading">
           Strategic Capital Relationships Across Borders.
         </h1>{" "}
-        <p className="hero-subtitle small">
+        <p className="hero-subtitle small fade-parallax">
           Focused on infrastructure, energy, real assets, and long-term
           institutional relationships.
         </p>
@@ -72,7 +72,7 @@ function RouteComponent() {
             <div
               className="columns rows small"
               data-gap="1"
-              style={{ "--min-width": "16ch" } as React.CSSProperties}
+              style={{ "--columns": 4 } as React.CSSProperties}
             >
               <p>
                 <span className="emphasis">Infrastructure</span>, supporting
