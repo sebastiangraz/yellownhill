@@ -2,7 +2,111 @@ import { useEffect, useRef } from "react";
 import "./CityParallax.css";
 import { cityScene, DEFAULT_CITY, PALETTE } from "../scenes/city";
 
-export function CityParallax() {
+const HERO_SEEDS = [539, 12, 87, 204, 451, 76, 318, 9];
+
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+type V2 = { x: number; y: number };
+// A full 2-point-perspective projection (matches brushengine's ProjectionParams).
+type Projection = {
+  vpX: V2;
+  vpZ: V2;
+  origin: V2;
+  perspective: number;
+  verticalScale: number;
+  zoom: number;
+};
+// Only the fields a profile actually animates while scrolling need to be listed.
+type ProjectionPatch = {
+  vpX?: Partial<V2>;
+  vpZ?: Partial<V2>;
+  origin?: Partial<V2>;
+  perspective?: number;
+  verticalScale?: number;
+  zoom?: number;
+};
+
+const patchProjection = (b: Projection, p: ProjectionPatch): Projection => ({
+  vpX: { ...b.vpX, ...p.vpX },
+  vpZ: { ...b.vpZ, ...p.vpZ },
+  origin: { ...b.origin, ...p.origin },
+  perspective: p.perspective ?? b.perspective,
+  verticalScale: p.verticalScale ?? b.verticalScale,
+  zoom: p.zoom ?? b.zoom,
+});
+
+const lerpV2 = (a: V2, b: V2, t: number): V2 => ({
+  x: lerp(a.x, b.x, t),
+  y: lerp(a.y, b.y, t),
+});
+
+const lerpProjection = (
+  a: Projection,
+  b: Projection,
+  t: number,
+): Projection => ({
+  vpX: lerpV2(a.vpX, b.vpX, t),
+  vpZ: lerpV2(a.vpZ, b.vpZ, t),
+  origin: lerpV2(a.origin, b.origin, t),
+  perspective: lerp(a.perspective, b.perspective, t),
+  verticalScale: lerp(a.verticalScale, b.verticalScale, t),
+  zoom: lerp(a.zoom, b.zoom, t),
+});
+
+// A profile is the projection at rest (`enter`, shown when the band first
+// appears at the bottom of the viewport, t=0) plus `exit`, listing only the
+// fields that move by the time it has scrolled to the top (t=1); apply() lerps
+// between them. The engine projects the 3D city into NDC (-1..1) and stretches
+// that to fill the canvas, so the canvas aspect ratio alone can't make a "wide"
+// skyline — it just stretches the same composition. The footer reads as
+// panoramic by spreading its vanishing points far apart horizontally, dropping
+// them near the horizon, and flattening perspective/verticalScale into a low
+// letterboxed band. To add a city, add an entry: a full `enter` + the moving
+// fields in `exit`.
+interface Profile {
+  enter: Projection;
+  exit: ProjectionPatch;
+}
+
+const PROFILES = {
+  hero: {
+    enter: {
+      vpX: { x: 1.6, y: -1.5 },
+      vpZ: { x: -3, y: -1.5 },
+      origin: { x: 1, y: -3 },
+      perspective: 0.75,
+      verticalScale: 1.5,
+      zoom: 0.4,
+    },
+    exit: { vpX: { y: -3.5 }, vpZ: { y: -3.5 }, origin: { y: -2 } },
+  },
+  footer: {
+    enter: {
+      vpX: { x: 8, y: -2 },
+      vpZ: { x: -8, y: -2 },
+      origin: { x: 0, y: -3 },
+      perspective: 0.75,
+      verticalScale: 1.5,
+      zoom: 0.25,
+    },
+    exit: { vpX: { y: -1 }, vpZ: { y: -1 }, origin: { y: -2 } },
+  },
+} satisfies Record<string, Profile>;
+
+interface CityParallaxProps {
+  /** Seeds cycled through as the element scrolls past. */
+  seeds?: number[];
+  /** Wrapper class controlling sizing/placement. */
+  className?: string;
+  /** Projection profile: tall hero composition vs. wide footer band. */
+  profile?: keyof typeof PROFILES;
+}
+
+export function CityParallax({
+  seeds = HERO_SEEDS,
+  className = "hero-canvas",
+  profile = "hero",
+}: CityParallaxProps = {}) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -36,7 +140,6 @@ export function CityParallax() {
         brushOverride: customBrush,
         inkBlend: true,
       });
-      const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
       const clamp01 = (x: number) => Math.max(0, Math.min(1, x));
       const smooth = (x: number) =>
         x < 0.5
@@ -66,17 +169,12 @@ export function CityParallax() {
         }
         engine.setStrokes(strokes);
       };
-      const SEEDS = [539, 12, 87, 204, 451, 76, 318, 9];
+      const SEEDS = seeds;
       setCity(SEEDS[0], 1, 0, 0, 0);
-      const base = {
-        vpX: { x: 1.8, y: -1.5 },
-        vpZ: { x: -2.6, y: -1.5 },
-        origin: { x: 1, y: -1.5 },
-        perspective: 0.75,
-        verticalScale: 1.5,
-        zoom: 0.4,
-      };
-      engine.setProjection(base);
+      const prof = PROFILES[profile];
+      const enter = prof.enter;
+      const exit = patchProjection(prof.enter, prof.exit);
+      engine.setProjection(enter);
 
       const INTRO_MS = 4000;
       const INTRO_STEPS = 24; // discrete geometry rebuilds across the reveal
@@ -84,7 +182,11 @@ export function CityParallax() {
       let introDone = false;
       let introRaf = 0;
       let introT0 = 0;
-      let introOriginX = base.origin.x; // intro pans origin.x from -1 → 1
+      // Intro pans origin.x across a 2-unit sweep that lands on the profile's
+      // resting origin.x (hero: -1 → 1; footer: -2 → 0 / centred).
+      const originXFrom = enter.origin.x - 2;
+      const originXTo: number = enter.origin.x;
+      let introOriginX: number = originXTo;
 
       let raf = 0;
 
@@ -94,12 +196,9 @@ export function CityParallax() {
         const vh = window.innerHeight || 1;
         const span = vh + rect.height;
         const t = clamp01(span > 0 ? (vh - rect.top) / span : 0);
-        engine.setProjection({
-          ...base,
-          vpX: { x: 1.6, y: lerp(-1.5, -3.5, t) },
-          vpZ: { x: -3, y: lerp(-1.5, -3.5, t) },
-          origin: { x: introOriginX, y: lerp(-3, -2, t) },
-        });
+        const proj = lerpProjection(enter, exit, t);
+        proj.origin.x = introOriginX; // intro pan overrides the resting origin.x
+        engine.setProjection(proj);
 
         if (introDone) {
           const i = Math.min(SEEDS.length - 1, Math.floor(t * SEEDS.length));
@@ -110,7 +209,7 @@ export function CityParallax() {
       const runIntro = (ts: number) => {
         if (!introT0) introT0 = ts;
         const e = smooth(clamp01((ts - introT0) / INTRO_MS));
-        introOriginX = lerp(-1, 1, e);
+        introOriginX = lerp(originXFrom, originXTo, e);
         const qe = Math.round(e * INTRO_STEPS) / INTRO_STEPS;
         setCity(
           SEEDS[0],
@@ -182,7 +281,11 @@ export function CityParallax() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="hero-canvas fade-starting" aria-hidden="true">
+    <div
+      ref={wrapRef}
+      className={`${className} fade-starting`}
+      aria-hidden="true"
+    >
       <canvas ref={canvasRef} />
     </div>
   );

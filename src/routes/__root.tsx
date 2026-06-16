@@ -8,6 +8,7 @@ import {
   Scripts,
   createRootRoute,
 } from "@tanstack/react-router";
+import { CityParallax } from "~/components/CityParallax";
 import appCss from "~/styles/app.css?url";
 
 export const Route = createRootRoute({
@@ -44,6 +45,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </div>
 
         <main className="container">{children}</main>
+        <footer className="container">
+          <CityParallax
+            className="footer-canvas"
+            profile="footer"
+            seeds={[842, 167, 23, 590, 311, 98, 466, 720]}
+          />
+        </footer>
         {/* <TanStackRouterDevtools position="bottom-right" /> */}
         <Scripts />
       </body>
