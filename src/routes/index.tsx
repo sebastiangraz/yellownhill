@@ -14,7 +14,10 @@ function RouteComponent() {
         <h1 className="hero-heading">
           Strategic Capital Relationships Across Borders.
         </h1>{" "}
-        <p className="hero-subtitle small fade-parallax">
+        <p
+          className="hero-subtitle small fade-parallax"
+          style={{ "--fade-inset": "20%" } as React.CSSProperties}
+        >
           Focused on infrastructure, energy, real assets, and long-term
           institutional relationships.
         </p>
@@ -137,7 +140,7 @@ function RouteComponent() {
 
       {/* Disclaimer */}
       <section>
-        <div className="startend gap-y-1 center px-3 grid max-width-prose small secondary">
+        <div className="startend gap-y-1 px-3 grid  small secondary">
           <span className="badge">Disclaimer</span>
           <p>Yellown Hill is a strategic capital platform.</p>
           <p>

@@ -153,11 +153,30 @@
       --column-gap: 6rem;
     }
   }
+  /*
+   * Scroll-driven opacity parallax — opacity tracks the element's position in
+   * the viewport. Each element gets its own view() timeline, so the class works
+   * on any number of elements at once with no per-instance setup or JS.
+   *
+   * Tunables (set inline or on an ancestor):
+   *   --fade-min    resting opacity at the extremes                 (default 0)
+   *   --fade-inset  shifts WHEN it appears/disappears via the
+   *                 scrollport edges. One or two <length-%> values
+   *                 (start / end). NEGATIVE outsets the edge →
+   *                 triggers earlier & lingers later; positive insets
+   *                 → triggers later, shorter window.               (default 0)
+   * Example — start fading in 20% before it enters, finish fading out 20% late:
+   *   <div class="fade-parallax" style="--fade-inset: -20%"> … </div>
+   */
   .fade-parallax {
     --fade-min: 0;
+    --fade-inset: 0%;
 
     animation: fade-parallax linear both;
-    animation-timeline: view();
+    /* Named timeline (not the view() function) so the inset is var()-tunable. */
+    view-timeline: --fade-parallax block;
+    view-timeline-inset: var(--fade-inset);
+    animation-timeline: --fade-parallax;
     animation-range: cover 0% cover 100%;
   }
 
@@ -165,17 +184,11 @@
     entry 0% {
       opacity: 0;
     }
-    entry 50% {
-      opacity: 0;
-    }
     entry 100% {
       opacity: 1;
     }
     exit 0% {
       opacity: 1;
-    }
-    exit 50% {
-      opacity: 0;
     }
     exit 100% {
       opacity: 0;
