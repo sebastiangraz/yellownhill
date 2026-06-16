@@ -7,6 +7,7 @@
 }
 
 .hero-heading {
+  opacity: 0;
   padding-block: 1rem;
   padding-inline: 1rem;
   place-self: start start;
@@ -19,12 +20,24 @@
   max-width: 20ch;
   mix-blend-mode: multiply;
   text-transform: uppercase;
+  transition: opacity 0.3s ease-in-out allow-discrete;
   @media (max-width: 480px) {
     font-size: 2.5rem;
   }
 }
 
+@starting-style {
+  .hero-heading {
+    content-visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.3s ease-in-out allow-discrete,
+      content-visibility 0.3s ease-in-out allow-discrete;
+  }
+}
+
 .hero-subtitle {
+  display: none;
   padding-block: 4rem;
   padding-inline: 1rem;
   place-self: end center;
@@ -32,6 +45,9 @@
   max-width: 48ch;
   text-wrap: balance;
   text-align: center;
+  @media (min-width: 480px) {
+    display: block;
+  }
 }
 
 .hero-canvas {

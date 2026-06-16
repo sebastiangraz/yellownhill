@@ -11,7 +11,10 @@ function RouteComponent() {
       {/* Hero */}
       <div className="hero">
         <CityParallax />
-        <h1 className="hero-heading">
+        <h1
+          className="hero-heading fade-parallax"
+          style={{ "--fade-inset": "10%" } as React.CSSProperties}
+        >
           Strategic Capital Relationships Across Borders.
         </h1>{" "}
         <p
@@ -22,7 +25,7 @@ function RouteComponent() {
           institutional relationships.
         </p>
       </div>
-      <section>
+      <section className="fade-parallax">
         <div className="startend gap-y-2 center px-4 grid">
           <span className="badge">Who We Are</span>
           <h2 className="max-width-prose">
@@ -52,7 +55,7 @@ function RouteComponent() {
       </section>
 
       {/* Our Approach */}
-      <section>
+      <section className="fade-parallax">
         <div className="startend gap-y-2 center px-4 grid">
           <span className="badge">Our Approach</span>
           <p className="max-width-prose">
@@ -68,7 +71,7 @@ function RouteComponent() {
       </section>
 
       {/* Areas of Focus */}
-      <section>
+      <section className="fade-parallax">
         <div className="startend gap-y-2 center px-4 grid">
           <div className="rows" data-gap="2">
             <span className="badge">Areas of Focus</span>
@@ -104,7 +107,7 @@ function RouteComponent() {
       </section>
 
       {/* Contact */}
-      <section>
+      <section className="fade-parallax">
         <div className="startend gap-y-2 center px-4 grid">
           <h2>Request a Conversation</h2>
           <p className="max-width-prose">
@@ -139,8 +142,8 @@ function RouteComponent() {
       </section>
 
       {/* Disclaimer */}
-      <section>
-        <div className="startend gap-y-1 px-3 grid  small secondary">
+      <section className="fade-parallax">
+        <div className="startend gap-y-1 px-3 grid  center small secondary">
           <span className="badge">Disclaimer</span>
           <p>Yellown Hill is a strategic capital platform.</p>
           <p>
