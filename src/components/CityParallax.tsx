@@ -19,7 +19,7 @@ export function CityParallax() {
         await import("brushengine");
       PALETTE.yellow = "#f5a623";
       PALETTE.red = "#418015";
-      PALETTE.teal = "#2d7dd2";
+      PALETTE.teal = "#444";
       if (disposed) return;
       const brushUrls = [...BRUSH_DATA_URIS, "/brushes/custom.svg"];
       const customBrush = brushUrls.length - 1;
