@@ -13,11 +13,15 @@
     /*  --scalefactor: 0.5rem - 1rem, 400px - 720px */
     --scale-half: clamp(0.5rem, -0.125rem + 2.5vw, 1rem);
 
+    --font-serif: "Affairs", Georgia, "Times New Roman", serif;
+    --font-sans:
+      "Forma DJR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
     line-height: var(--scale-default);
   }
 
   body {
-    font-family: "Affairs", Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
     background: #dfdfdc;
     line-height: calc(var(--scale-default) * 1.5);
     font-size: calc(var(--scale-default));
@@ -30,6 +34,11 @@
   }
 
   h2 {
+    /* font-family: var(--font-sans);
+    font-variation-settings:
+      "wdth" 100,
+      "opsz" 21,
+      "wght" 450; */
     font-size: 1.25rlh;
     line-height: 1.3334;
   }
@@ -163,12 +172,8 @@
     text-transform: uppercase;
   }
   .sans {
-    font-family:
-      "Forma DJR",
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      sans-serif;
+    font-family: var(--font-sans);
+    font-variation-settings: "opsz" 1;
   }
   .columns {
     display: grid;
@@ -259,7 +264,7 @@
   }
 
   .badge {
-    font-family: "Affairs", Georgia, "Times New Roman", serif;
+    font-family: var(--font-serif);
     font-size: 0.75rlh;
     height: 1rlh;
     display: inline-flex;
@@ -290,8 +295,10 @@
   input[type="email"],
   textarea {
     appearance: none;
-    font-family: "Affairs", Georgia, "Times New Roman", serif;
-    font-size: 0.75rlh;
+    font-family: var(--font-sans);
+    font-variation-settings: "opsz" 1;
+    font-size: 0.8rlh;
+    text-box: unset;
     width: 100%;
     min-height: 3rlh;
     padding-inline: 1rlh;

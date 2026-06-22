@@ -16,7 +16,7 @@ function RouteComponent() {
           src={cloud}
           className={styles.tile}
           gridCols={16}
-          distortionAmount={80}
+          distortionAmount={92}
           originX={0}
           originY={0}
           falloffCurve="ease-out"
@@ -120,7 +120,7 @@ function RouteComponent() {
       {/* Contact */}
       <section className="fade-parallax">
         <div className="startend gap-y-2 center px-4 grid">
-          <h2>Request a Conversation</h2>
+          <span className="badge">Request a Conversation</span>
           <p className="max-width-prose">
             Ray Gelbberg · Founder, New York, NY 10022
           </p>
@@ -152,7 +152,7 @@ function RouteComponent() {
       </section>
 
       {/* Disclaimer */}
-      <section className="fade-parallax">
+      <section className="bleed fade-parallax">
         <div className="startend gap-y-1 px-3 grid center small secondary">
           <span className="badge">Disclaimer</span>
           <p>Yellown Hill is a strategic capital platform.</p>
