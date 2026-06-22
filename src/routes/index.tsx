@@ -1,10 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
 import styles from "./home.module.css";
-import cloud from "../../public/cloud.jpg";
-import tester from "../../public/tester.png";
-import sky from "../../public/sky.png";
-import bird from "../../public/bird.png";
+import cloud from "/cloud.jpg";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -38,7 +35,7 @@ function RouteComponent() {
           </h1>{" "}
         </div>
       </div>
-      <section className="fade-parallax bleed">
+      <section className="fade-parallax bleed ">
         <div className="startend gap-y-2 center px-4 grid">
           <span className="badge">Who We Are</span>
           <h2 className="max-width-prose">
