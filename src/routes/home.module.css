@@ -56,3 +56,14 @@
     object-position: center;
   }
 }
+
+.contactForm {
+  display: grid;
+  row-gap: 1rem;
+  width: 100%;
+  text-align: left;
+
+  & button {
+    justify-self: start;
+  }
+}

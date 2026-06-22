@@ -137,7 +137,7 @@ function RouteComponent() {
             Ray Gelbberg · Founder, New York, NY 10022
           </p>
           <form
-            className="contact-form max-width-prose"
+            className={`${styles.contactForm} max-width-prose`}
             onSubmit={(e) => e.preventDefault()}
           >
             <input
