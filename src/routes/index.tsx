@@ -17,15 +17,16 @@ function RouteComponent() {
           className={styles.tile}
           gridCols={16}
           distortionAmount={80}
-          originX={1}
-          originY={1}
+          originX={0}
+          originY={0}
           falloffCurve="ease-out"
           falloffPower={0.4}
           tileGap={1}
           seed={2}
           animate={true}
-          stagger={1000}
-          duration={2800}
+          stagger={2000}
+          duration={3000}
+          staggerInvert={true}
           animationRange={0.4}
           distortionMode="scatter"
         />
