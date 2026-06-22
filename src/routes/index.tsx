@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
+import styles from "./home.module.css";
 import cloud from "../../public/cloud.jpg";
 import tester from "../../public/tester.png";
 import sky from "../../public/sky.png";
@@ -13,10 +14,10 @@ function RouteComponent() {
   return (
     <>
       {/* Hero */}
-      <div className="hero">
+      <div className={styles.hero}>
         <TileDistort
           src={cloud}
-          className="tile"
+          className={styles.tile}
           gridCols={14}
           distortionAmount={80}
           originX={1}
@@ -33,14 +34,14 @@ function RouteComponent() {
         />
         <div className="fade-starting">
           <h1
-            className="hero-heading fade-parallax"
+            className={`${styles.heroHeading} fade-parallax`}
             style={{ "--fade-inset": "10%" } as React.CSSProperties}
           >
             Strategic Capital Relationships Across Borders.
           </h1>{" "}
         </div>
         <p
-          className="hero-subtitle small fade-parallax"
+          className={`${styles.heroSubtitle} small fade-parallax`}
           style={{ "--fade-inset": "20%" } as React.CSSProperties}
         >
           Focused on infrastructure, energy, real assets, and long-term
@@ -164,7 +165,7 @@ function RouteComponent() {
 
       {/* Disclaimer */}
       <section className="fade-parallax">
-        <div className="startend gap-y-1 px-3 grid  center small secondary">
+        <div className="startend gap-y-1 px-3 grid center small secondary">
           <span className="badge">Disclaimer</span>
           <p>Yellown Hill is a strategic capital platform.</p>
           <p>

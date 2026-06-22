@@ -1,12 +1,8 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { TileDistort } from "~/components/TileDistort";
-import tileDistortCss from "~/components/TileDistort.css?url";
 
 export const Route = createFileRoute("/distort")({
-  head: () => ({
-    links: [{ rel: "stylesheet", href: tileDistortCss }],
-  }),
   component: RouteComponent,
 });
 

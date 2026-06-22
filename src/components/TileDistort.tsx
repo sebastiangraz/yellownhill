@@ -1,5 +1,5 @@
 import * as React from "react";
-import "./TileDistort.css";
+import styles from "./TileDistort.module.css";
 /* -------------------------------------------------------------------------- */
 /*  CONTROLS                                                                   */
 /*  Every control is a prop (see TileDistortProps). The DEFAULTS below are the */
@@ -400,7 +400,10 @@ export function TileDistort({
   ]);
 
   return (
-    <div ref={wrapRef} className={className} data-tile-distort>
+    <div
+      ref={wrapRef}
+      className={[styles.root, className].filter(Boolean).join(" ")}
+    >
       <canvas ref={canvasRef} />
     </div>
   );

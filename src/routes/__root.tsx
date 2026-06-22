@@ -10,14 +10,10 @@ import {
 } from "@tanstack/react-router";
 
 import globalCss from "~/styles/global.css?url";
-import homeCss from "./home.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
-    links: [
-      { rel: "stylesheet", href: globalCss },
-      { rel: "stylesheet", href: homeCss },
-    ],
+    links: [{ rel: "stylesheet", href: globalCss }],
     meta: [
       { name: "description", content: "Yellown Hill" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },

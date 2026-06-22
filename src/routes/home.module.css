@@ -8,7 +8,7 @@
   grid-area: 1 / 1;
 }
 
-.hero-heading {
+.heroHeading {
   padding-block: 1rem;
   padding-inline: 1rem;
   place-self: start start;
@@ -25,7 +25,7 @@
     font-size: 2.5rem;
   }
 }
-.hero-subtitle {
+.heroSubtitle {
   display: none;
   padding-block: 4rem;
   padding-inline: 1rem;
