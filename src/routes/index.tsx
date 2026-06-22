@@ -18,7 +18,7 @@ function RouteComponent() {
         <TileDistort
           src={cloud}
           className={styles.tile}
-          gridCols={14}
+          gridCols={12}
           distortionAmount={80}
           originX={1}
           originY={1}
@@ -32,23 +32,20 @@ function RouteComponent() {
           animationRange={0.4}
           distortionMode="scatter"
         />
-        <div className="fade-starting">
-          <h1
-            className={`${styles.heroHeading} fade-parallax`}
-            style={{ "--fade-inset": "10%" } as React.CSSProperties}
-          >
-            Strategic Capital Relationships Across Borders.
+        <div className={`${styles.heading} fade-parallax`}>
+          <h1 style={{ "--fade-inset": "10%" } as React.CSSProperties}>
+            Strategic capital relationships across borders.
           </h1>{" "}
+          <p
+            className={`${styles.heroSubtitle} small `}
+            style={{ "--fade-inset": "20%" } as React.CSSProperties}
+          >
+            Focused on infrastructure, energy, real assets, and long-term
+            institutional relationships.
+          </p>
         </div>
-        <p
-          className={`${styles.heroSubtitle} small fade-parallax`}
-          style={{ "--fade-inset": "20%" } as React.CSSProperties}
-        >
-          Focused on infrastructure, energy, real assets, and long-term
-          institutional relationships.
-        </p>
       </div>
-      <section className="fade-parallax">
+      <section className="fade-parallax bleed">
         <div className="startend gap-y-2 center px-4 grid">
           <span className="badge">Who We Are</span>
           <h2 className="max-width-prose">

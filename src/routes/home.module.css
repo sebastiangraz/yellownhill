@@ -1,51 +1,46 @@
 .hero {
   display: grid;
-  min-height: 60vh;
   border-inline: 1px solid #0001;
+  margin-block: 1rem;
+  padding-inline: 3rem;
+  padding-block: 2rem;
 }
 
 .hero > * {
   grid-area: 1 / 1;
 }
 
-.heroHeading {
-  padding-block: 1rem;
-  padding-inline: 1rem;
-  place-self: start start;
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: start;
+  align-self: flex-end;
+  justify-content: space-between;
   z-index: 1;
   pointer-events: none;
-  font-size: 4rem;
-  font-weight: 850;
-  line-height: 0.86;
-  letter-spacing: -0.04em;
-  max-width: 20ch;
-  mix-blend-mode: multiply;
-  text-transform: uppercase;
+
+  h1 {
+    font-size: 2.5rem;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    max-width: 18ch;
+  }
   @media (max-width: 480px) {
     font-size: 2.5rem;
   }
 }
 .heroSubtitle {
-  display: none;
-  padding-block: 4rem;
-  padding-inline: 1rem;
-  place-self: end center;
   z-index: 1;
   max-width: 48ch;
   text-wrap: balance;
-  text-align: center;
-  @media (min-width: 480px) {
-    display: block;
-  }
 }
 .tile {
   aspect-ratio: 1 / 1;
   position: relative;
   background: #d4dce1;
   width: 40%;
-  margin-left: auto;
-  margin-top: 1rem;
-  margin-right: 1rem;
+  place-self: center end;
   canvas {
     position: absolute;
     top: 0;

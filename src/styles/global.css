@@ -8,21 +8,13 @@
   }
 
   body {
-    font-family:
-      "Forma DJR",
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      sans-serif;
+    font-family: "Affairs", Georgia, "Times New Roman", serif;
     background: #dfdfdc;
     line-height: 1.5;
   }
 
   :is(h1, h2, h3, h4, h5, h6) {
-    font-variation-settings:
-      "opsz" 14,
-      "wdth" 50;
-    text-transform: uppercase;
+    font-weight: normal;
     text-wrap: balance;
   }
 
@@ -32,7 +24,6 @@
   }
 
   p {
-    font-family: "Affairs", Georgia, "Times New Roman", serif;
     text-wrap: balance;
   }
 
@@ -118,7 +109,9 @@
     row-gap: 1rem;
     justify-content: space-between;
     align-items: center;
-    padding: 4rem 1rem 2rem 1rem;
+    padding: 4rem 3rem 1rem 3rem;
+    margin-bottom: 1rem;
+    border-inline: 1px solid #0001;
   }
 
   .navigation {
@@ -155,8 +148,13 @@
     font-family: "Affairs Mono", monospace;
     text-transform: uppercase;
   }
-  .serif {
-    font-family: "Affairs", Georgia, "Times New Roman", serif;
+  .sans {
+    font-family:
+      "Forma DJR",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
   }
   .columns {
     display: grid;
@@ -289,7 +287,12 @@
 
   button {
     appearance: none;
-    font-family: inherit;
+    font-family:
+      "Forma DJR",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      sans-serif;
     text-transform: uppercase;
     text-align: center;
     font-size: 0.75rem;
@@ -301,7 +304,7 @@
     border-radius: 99em;
     border: none;
     cursor: pointer;
-    width: calc-size(max-content, round(up, size, 0.5rlh));
+    width: calc-size(max-content, round(up, size, 0.5rem));
     font-variation-settings: "opsz" 8;
 
     transition: opacity 0.2s ease;
