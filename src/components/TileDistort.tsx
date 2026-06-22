@@ -40,11 +40,25 @@ const DEFAULTS = {
   rotationAmount: 4,
   /** Seed for the pseudo-random scatter directions. */
   seed: 1337,
+  /** When true, tiles fade in and slide from undistorted → distorted on mount. */
+  animate: false,
+  /** Total stagger spread, in ms, between the first and last tile to animate.
+   *  Ordering follows distance from the origin (see staggerInvert). */
+  stagger: 700,
+  /** Duration of a single tile's fade + move, in ms. */
+  duration: 800,
+  /** Flip the stagger order: animate from the edges inward to the origin. */
+  staggerInvert: false,
 };
 
 /* -------------------------------------------------------------------------- */
 
 const DEG = Math.PI / 180;
+
+const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+
+/** Eased progress for the fade + slide. */
+const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
 
 /** Deterministic 0..1 PRNG so the layout is stable across renders. */
 function mulberry32(seed: number) {
@@ -114,6 +128,14 @@ export type TileDistortProps = {
   rotationAmount?: number;
   /** PRNG seed for scatter directions. */
   seed?: number;
+  /** Animate tiles in (fade + slide from undistorted to distorted). */
+  animate?: boolean;
+  /** Total stagger spread between first and last tile, in ms. */
+  stagger?: number;
+  /** Duration of a single tile's animation, in ms. */
+  duration?: number;
+  /** Animate from the edges inward to the origin instead of origin outward. */
+  staggerInvert?: boolean;
 };
 
 export function TileDistort({
@@ -130,6 +152,10 @@ export function TileDistort({
   distortionMode = DEFAULTS.distortionMode,
   rotationAmount = DEFAULTS.rotationAmount,
   seed = DEFAULTS.seed,
+  animate = DEFAULTS.animate,
+  stagger = DEFAULTS.stagger,
+  duration = DEFAULTS.duration,
+  staggerInvert = DEFAULTS.staggerInvert,
 }: TileDistortProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const wrapRef = React.useRef<HTMLDivElement>(null);
@@ -161,7 +187,9 @@ export function TileDistort({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const draw = () => {
+    // elapsed === null  → fully settled (final) frame
+    // elapsed is ms      → animated frame at that time since start
+    const draw = (elapsed: number | null) => {
       const dpr = window.devicePixelRatio || 1;
       const w = wrap.clientWidth;
       const h = wrap.clientHeight;
@@ -212,6 +240,17 @@ export function TileDistort({
           const intensity = falloff(dist, falloffCurve, falloffPower, invertFalloff);
           const mag = distortionAmount * intensity;
 
+          // Per-tile animation progress (0 = undistorted/transparent, 1 = final).
+          // The tile's delay is its distance-from-origin order × the stagger
+          // spread; staggerInvert reverses center-out into edges-in.
+          let prog = 1;
+          if (elapsed !== null) {
+            const order = staggerInvert ? 1 - dist : dist;
+            const delay = order * stagger;
+            prog = easeOutCubic(clamp01((elapsed - delay) / duration));
+          }
+          const alpha = prog;
+
           let ox = 0;
           let oy = 0;
           switch (distortionMode) {
@@ -234,8 +273,13 @@ export function TileDistort({
               break;
           }
 
+          // Scale the displacement + rotation by progress so the image starts
+          // undistorted (prog 0) and settles into its full offset (prog 1).
+          ox *= prog;
+          oy *= prog;
+
           const rot =
-            rotationAmount * DEG * intensity * (Math.cos(angle) >= 0 ? 1 : -1);
+            rotationAmount * DEG * intensity * prog * (Math.cos(angle) >= 0 ? 1 : -1);
 
           // The tile (the "mask") stays put on the fixed grid. Distortion moves
           // the image *underneath* it, so we offset the SOURCE sample region,
@@ -266,6 +310,7 @@ export function TileDistort({
           sy = Math.min(Math.max(sy, 0), Math.max(0, img.height - ssH));
 
           ctx.save();
+          ctx.globalAlpha = alpha;
           // Clip to the fixed tile window so shifted/rotated content can't bleed
           // into neighbouring tiles.
           ctx.beginPath();
@@ -284,10 +329,36 @@ export function TileDistort({
       }
     };
 
-    draw();
-    const ro = new ResizeObserver(draw);
+    let raf = 0;
+    let start = 0;
+    const total = stagger + duration; // when every tile has finished
+
+    if (animate) {
+      start = performance.now();
+      const tick = () => {
+        const elapsed = performance.now() - start;
+        draw(elapsed);
+        if (elapsed < total) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          draw(null); // settle exactly on the final frame
+        }
+      };
+      raf = requestAnimationFrame(tick);
+    } else {
+      draw(null);
+    }
+
+    // Redraw on resize at the current animation time (or settled if static).
+    const ro = new ResizeObserver(() => {
+      draw(animate ? performance.now() - start : null);
+    });
     ro.observe(wrap);
-    return () => ro.disconnect();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, [
     ready,
     gridCols,
@@ -301,6 +372,10 @@ export function TileDistort({
     distortionMode,
     rotationAmount,
     seed,
+    animate,
+    stagger,
+    duration,
+    staggerInvert,
   ]);
 
   return (

@@ -49,7 +49,13 @@ function RouteComponent() {
           <TileDistort
             src={src}
             className="bleed"
-            // Square stage so tiles stay roughly square; tweak as desired.
+            // Animate in from the center outward.
+            animate
+            originX={0.5}
+            originY={0.5}
+            stagger={700}
+            duration={800}
+            // staggerInvert  // ← flip to animate edges → center
           />
         ) : null}
       </div>

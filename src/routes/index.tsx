@@ -17,13 +17,17 @@ function RouteComponent() {
           src={cloud}
           className="tile"
           gridCols={14}
-          distortionAmount={120}
+          distortionAmount={90}
           originX={0}
           originY={0}
           falloffCurve="ease-out"
           falloffPower={0.4}
           tileGap={1}
           seed={2}
+          animate={true}
+          staggerInvert
+          stagger={1000}
+          duration={3200}
         />
         <div className="fade-starting">
           <h1
