@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import "./TileDistort.css";
 /* -------------------------------------------------------------------------- */
 /*  CONTROLS                                                                   */
 /*  Every control is a prop (see TileDistortProps). The DEFAULTS below are the */
@@ -244,7 +244,12 @@ export function TileDistort({
           const dx = nx - originX;
           const dy = ny - originY;
           const dist = Math.hypot(dx, dy) / (maxDist || 1);
-          const intensity = falloff(dist, falloffCurve, falloffPower, invertFalloff);
+          const intensity = falloff(
+            dist,
+            falloffCurve,
+            falloffPower,
+            invertFalloff,
+          );
           const mag = distortionAmount * intensity;
 
           // Per-tile animation progress (0 = undistorted/transparent, 1 = final).
@@ -290,7 +295,11 @@ export function TileDistort({
           oy *= move;
 
           const rot =
-            rotationAmount * DEG * intensity * move * (Math.cos(angle) >= 0 ? 1 : -1);
+            rotationAmount *
+            DEG *
+            intensity *
+            move *
+            (Math.cos(angle) >= 0 ? 1 : -1);
 
           // The tile (the "mask") stays put on the fixed grid. Distortion moves
           // the image *underneath* it, so we offset the SOURCE sample region,

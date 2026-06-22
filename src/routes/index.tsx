@@ -3,6 +3,7 @@ import TileDistort from "~/components/TileDistort";
 import cloud from "../../public/cloud.jpg";
 import tester from "../../public/tester.png";
 import sky from "../../public/sky.png";
+import bird from "../../public/bird.png";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -17,7 +18,7 @@ function RouteComponent() {
           src={cloud}
           className="tile"
           gridCols={14}
-          distortionAmount={100}
+          distortionAmount={80}
           originX={1}
           originY={1}
           falloffCurve="ease-out"
