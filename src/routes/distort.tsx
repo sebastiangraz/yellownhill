@@ -1,0 +1,58 @@
+import * as React from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { TileDistort } from "~/components/TileDistort";
+import tileDistortCss from "~/components/TileDistort.css?url";
+
+export const Route = createFileRoute("/distort")({
+  head: () => ({
+    links: [{ rel: "stylesheet", href: tileDistortCss }],
+  }),
+  component: RouteComponent,
+});
+
+function RouteComponent() {
+  const [src, setSrc] = React.useState<string | null>(null);
+
+  // Revoke object URLs when they change / unmount to avoid leaks.
+  React.useEffect(() => {
+    return () => {
+      if (src?.startsWith("blob:")) URL.revokeObjectURL(src);
+    };
+  }, [src]);
+
+  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setSrc(URL.createObjectURL(file));
+  };
+
+  return (
+    <section className="fade-parallax">
+      <div className="startend gap-y-2 center px-3 grid">
+        <span className="badge">Generative · Tile Distortion</span>
+        <p className="max-width-prose small secondary">
+          Choose an image. It is sliced into a grid; each tile drifts from its
+          home position. Art-direct the effect via the constants at the top of
+          <span className="mono"> TileDistort.tsx</span>.
+        </p>
+
+        <label className="badge" style={{ cursor: "pointer" }}>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onFile}
+            style={{ display: "none" }}
+          />
+          {src ? "Choose another image →" : "Choose an image →"}
+        </label>
+
+        {src ? (
+          <TileDistort
+            src={src}
+            className="bleed"
+            // Square stage so tiles stay roughly square; tweak as desired.
+          />
+        ) : null}
+      </div>
+    </section>
+  );
+}

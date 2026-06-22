@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CityParallax } from "~/components/CityParallax";
+import TileDistort from "~/components/TileDistort";
+import cloud from "../../public/cloud.jpg";
+import tester from "../../public/tester.png";
+import sky from "../../public/sky.png";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -10,7 +13,18 @@ function RouteComponent() {
     <>
       {/* Hero */}
       <div className="hero">
-        <CityParallax />
+        <TileDistort
+          src={cloud}
+          className="tile"
+          gridCols={14}
+          distortionAmount={120}
+          originX={0}
+          originY={0}
+          falloffCurve="ease-out"
+          falloffPower={0.4}
+          tileGap={1}
+          seed={2}
+        />
         <div className="fade-starting">
           <h1
             className="hero-heading fade-parallax"

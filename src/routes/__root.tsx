@@ -8,12 +8,16 @@ import {
   Scripts,
   createRootRoute,
 } from "@tanstack/react-router";
-import { CityParallax } from "~/components/CityParallax";
-import appCss from "~/styles/app.css?url";
+
+import globalCss from "~/styles/global.css?url";
+import homeCss from "./home.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: globalCss },
+      { rel: "stylesheet", href: homeCss },
+    ],
     meta: [
       { name: "description", content: "Yellown Hill" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
@@ -45,13 +49,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </div>
 
         <main className="container">{children}</main>
-        <footer className="container">
-          <CityParallax
-            className="footer-canvas"
-            profile="footer"
-            seeds={[842, 167, 23, 590, 311, 98, 466, 720]}
-          />
-        </footer>
+        <footer className="container"></footer>
         {/* <TanStackRouterDevtools position="bottom-right" /> */}
         <Scripts />
       </body>

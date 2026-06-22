@@ -229,7 +229,6 @@
   font-display: swap;
 }
 
-/* Affairs — static regular weight. Served from public/fonts. */
 @font-face {
   font-family: "Affairs";
   src: url("/fonts/Affairs-Regular.woff2") format("woff2");
