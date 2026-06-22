@@ -44,6 +44,8 @@
   background: #d4dce1;
   width: 40%;
   margin-left: auto;
+  margin-top: 1rem;
+  margin-right: 1rem;
   canvas {
     position: absolute;
     top: 0;
