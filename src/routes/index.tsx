@@ -36,13 +36,6 @@ function RouteComponent() {
           <h1 style={{ "--fade-inset": "10%" } as React.CSSProperties}>
             Strategic capital relationships across borders.
           </h1>{" "}
-          <p
-            className={`${styles.heroSubtitle} small `}
-            style={{ "--fade-inset": "20%" } as React.CSSProperties}
-          >
-            Focused on infrastructure, energy, real assets, and long-term
-            institutional relationships.
-          </p>
         </div>
       </div>
       <section className="fade-parallax bleed">
