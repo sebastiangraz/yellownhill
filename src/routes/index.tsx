@@ -12,6 +12,12 @@ function RouteComponent() {
     <>
       {/* Hero */}
       <div className={styles.hero}>
+        {" "}
+        <div className={`${styles.heading} fade-parallax`}>
+          <h1 style={{ "--fade-inset": "10%" } as React.CSSProperties}>
+            Strategic capital relationships across borders.
+          </h1>{" "}
+        </div>
         <TileDistort
           src={cloud}
           className={styles.tile}
@@ -30,11 +36,6 @@ function RouteComponent() {
           animationRange={0.4}
           distortionMode="scatter"
         />
-        <div className={`${styles.heading} fade-parallax`}>
-          <h1 style={{ "--fade-inset": "10%" } as React.CSSProperties}>
-            Strategic capital relationships across borders.
-          </h1>{" "}
-        </div>
       </div>
       <section className="fade-parallax bleed ">
         <div className="startend gap-y-2 center px-4 grid">

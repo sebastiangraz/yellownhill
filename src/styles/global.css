@@ -160,7 +160,6 @@
   }
   .startend {
     grid-column: start / end;
-    container-type: inline-size;
   }
 
   .bleed {

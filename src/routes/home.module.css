@@ -3,7 +3,8 @@
   border-inline: 1px solid #0001;
   margin-block: 1rlh;
   padding-inline: 3rlh;
-  padding-block: 3rlh;
+  padding-block: 2rlh;
+  gap: 3rlh;
   width: round(nearest, 100%, 1rlh);
   /* background-image:
     linear-gradient(to right, #00000005 1px, transparent 1px),
@@ -13,7 +14,9 @@
 }
 
 .hero > * {
-  grid-area: 1 / 1;
+  @media (min-width: 44rem) {
+    grid-area: 1 / 1;
+  }
 }
 
 .heading {
@@ -27,8 +30,9 @@
   pointer-events: none;
 
   h1 {
+    /* text-box: trim-both ex alphabetic; */
     font-size: 2.5rlh;
-    line-height: 1.2;
+    line-height: 1.175;
     letter-spacing: -0.03em;
     max-width: 18ch;
   }
@@ -37,10 +41,8 @@
 .tile {
   aspect-ratio: 1 / 1;
   position: relative;
-  /* background: #d4dce1; */
   width: 100%;
-  max-width: 16rlh;
-  place-self: center end;
+  place-self: center start;
   canvas {
     position: absolute;
     top: 50%;
@@ -50,6 +52,10 @@
     object-fit: cover;
     object-position: center;
     transform: translate(calc(-50% + 1px), calc(-50% + 1px));
+  }
+  @media (min-width: 44rem) {
+    max-width: 16rlh;
+    place-self: center end;
   }
 }
 
