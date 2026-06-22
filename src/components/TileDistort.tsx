@@ -49,6 +49,10 @@ const DEFAULTS = {
   duration: 800,
   /** Flip the stagger order: animate from the edges inward to the origin. */
   staggerInvert: false,
+  /** Fraction of the distortion to animate, 0..1. 1 = animate the full travel
+   *  (undistorted → distorted). 0.1 = start at 90% distorted and animate only
+   *  the final 10%. */
+  animationRange: 1,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -136,6 +140,8 @@ export type TileDistortProps = {
   duration?: number;
   /** Animate from the edges inward to the origin instead of origin outward. */
   staggerInvert?: boolean;
+  /** Fraction of the distortion to animate, 0..1 (1 = full travel). */
+  animationRange?: number;
 };
 
 export function TileDistort({
@@ -156,6 +162,7 @@ export function TileDistort({
   stagger = DEFAULTS.stagger,
   duration = DEFAULTS.duration,
   staggerInvert = DEFAULTS.staggerInvert,
+  animationRange = DEFAULTS.animationRange,
 }: TileDistortProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const wrapRef = React.useRef<HTMLDivElement>(null);
@@ -250,6 +257,10 @@ export function TileDistort({
             prog = easeOutCubic(clamp01((elapsed - delay) / duration));
           }
           const alpha = prog;
+          // Spatial travel: only `animationRange` of the distortion is animated;
+          // the remainder is applied immediately as a static starting offset.
+          const range = clamp01(animationRange);
+          const move = elapsed === null ? 1 : 1 - range + range * prog;
 
           let ox = 0;
           let oy = 0;
@@ -273,13 +284,13 @@ export function TileDistort({
               break;
           }
 
-          // Scale the displacement + rotation by progress so the image starts
-          // undistorted (prog 0) and settles into its full offset (prog 1).
-          ox *= prog;
-          oy *= prog;
+          // Scale the displacement + rotation by `move` so the image starts at
+          // its static offset (1 - range) and settles into the full offset.
+          ox *= move;
+          oy *= move;
 
           const rot =
-            rotationAmount * DEG * intensity * prog * (Math.cos(angle) >= 0 ? 1 : -1);
+            rotationAmount * DEG * intensity * move * (Math.cos(angle) >= 0 ? 1 : -1);
 
           // The tile (the "mask") stays put on the fixed grid. Distortion moves
           // the image *underneath* it, so we offset the SOURCE sample region,
@@ -376,6 +387,7 @@ export function TileDistort({
     stagger,
     duration,
     staggerInvert,
+    animationRange,
   ]);
 
   return (
