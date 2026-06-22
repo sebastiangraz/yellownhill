@@ -18,7 +18,7 @@ function RouteComponent() {
         <TileDistort
           src={cloud}
           className={styles.tile}
-          gridCols={12}
+          gridCols={16}
           distortionAmount={80}
           originX={1}
           originY={1}
