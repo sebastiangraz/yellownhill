@@ -67,23 +67,42 @@ function RouteComponent() {
       </section>
 
       {/* Our Approach */}
-      <section className="fade-parallax">
-        <div className="startend gap-y-2 center px-4 grid">
-          <span className="badge">Our Approach</span>
-          <p className="max-width-prose">
+      <section className="bleed">
+        <div className={`${styles.card} startend gap-y-2 fade-parallax`}>
+          {/* <span className="badge">Our Approach</span> */}
+          {/* <p>
             Yellown Hill believes that enduring opportunities are built through
             long-term relationships rather than purely transactional engagement.
           </p>
-          <p className="max-width-prose">
+          <p>
             The platform supports strategic initiatives that benefit from
             international perspective, trusted networks, and cross-border
             coordination.
-          </p>
+          </p> */}
+          <p style={{ gridColumn: "span 2", gridRow: "span 1" }}>small</p>
+          <p>small</p>
+          <p>small</p>
+          <p>small</p>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div> <div></div>
         </div>
       </section>
 
       {/* Areas of Focus */}
-      <section className="fade-parallax">
+      <section className="bleed fade-parallax">
         <div className="startend gap-y-2 center px-4 grid">
           <div className="rows" data-gap="2">
             <span className="badge">Areas of Focus</span>
