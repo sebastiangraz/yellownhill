@@ -137,11 +137,24 @@
       align-items: end;
     }
   }
+
   & [data-span="2"] {
     grid-column: span 2;
   }
   & [data-span="3"] {
     grid-column: span 3;
+  }
+  & .cardTitle {
+    @media (max-width: 32rem) {
+      grid-row: 2;
+      grid-column: span 5;
+    }
+  }
+  & .cardParagraph {
+    @media (max-width: 32rem) {
+      grid-row: 3;
+      grid-column: span 7;
+    }
   }
 }
 .logoMark {

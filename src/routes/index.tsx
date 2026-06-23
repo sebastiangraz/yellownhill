@@ -78,13 +78,13 @@ function RouteComponent() {
           <div></div>
           <div></div>
           <div></div>
-          <div data-span="2">
+          <div data-span="2" className={styles.cardTitle}>
             <div className={styles.cardContent}>
               <h3>Our Approach</h3>
               <span className="badge">New York, NY&nbsp;10022</span>
             </div>
           </div>
-          <div data-span="3">
+          <div data-span="3" className={styles.cardParagraph}>
             <div className={styles.cardContent}>
               <p className={`small`}>
                 Yellown Hill believes that enduring opportunities are built
