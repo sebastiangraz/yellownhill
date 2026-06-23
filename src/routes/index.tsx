@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
 import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
-import cloud from "/cloud.jpg";
+import skyscraper from "/skyscraper.jpg";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -20,7 +20,7 @@ function RouteComponent() {
           </h1>{" "}
         </div>
         <TileDistort
-          src={cloud}
+          src={skyscraper}
           className={styles.tile}
           gridCols={16}
           distortionAmount={92}
