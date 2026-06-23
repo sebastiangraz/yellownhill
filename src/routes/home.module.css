@@ -70,7 +70,7 @@
   }
 }
 
-.card {
+/* .card {
   --wrapper: 720px;
   --gutter: 0px;
   --cols: 7;
@@ -82,10 +82,74 @@
   display: grid;
   grid-template-columns: repeat(var(--cols), 1fr);
   grid-auto-flow: dense;
-  grid-auto-rows: minmax(var(--rh), auto);
+  grid-auto-rows: minmax(calc(var(--rh) - var(--gutter)), auto);
   grid-gap: var(--gutter);
   & > * {
     grid-column: span 1;
     grid-row: span 1;
+  }
+} */
+
+.card {
+  --wrapper: 720px;
+  --gutter: 0px;
+  --cols: 5;
+  --edge: minmax(3rlh, auto);
+  --rh: calc(var(--wrapper) / var(--cols));
+
+  background: #000;
+  color: #fff;
+  margin-block: 4rlh;
+
+  display: grid;
+  grid-template-columns: var(--edge) repeat(var(--cols), 1fr) var(--edge);
+  grid-auto-columns: var(--edge);
+  grid-auto-flow: dense;
+  grid-template-rows:
+    var(--edge) repeat(
+      1,
+      calc((var(--wrapper) - 2 * var(--edge)) / var(--cols))
+    )
+    var(--edge);
+  grid-auto-rows: var(--edge);
+  grid-gap: var(--gutter);
+  & > * {
+    display: grid;
+    position: relative;
+    grid-column: span 1;
+    grid-row: span 1;
+    &:after {
+      content: "";
+      position: relative;
+      grid-area: 1 / 1;
+      border-right: 1px solid #fff;
+      height: calc(100% - 1rlh);
+      top: 0.5rlh;
+    }
+    &:before {
+      content: "";
+      position: relative;
+      grid-area: 1 / 1;
+      border-top: 1px solid #fff;
+      width: calc(100% - 1rlh);
+      left: 0.5rlh;
+    }
+  }
+  & .cardTitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rlh;
+  }
+  & .cardContent {
+    padding: 2rlh;
+    grid-area: 1 / 1;
+  }
+  & [data-span="2"] {
+    grid-column: span 2;
+  }
+  & [data-span="3"] {
+    grid-column: span 3;
   }
 }

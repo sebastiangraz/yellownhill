@@ -79,10 +79,6 @@ function RouteComponent() {
             international perspective, trusted networks, and cross-border
             coordination.
           </p> */}
-          <p style={{ gridColumn: "span 2", gridRow: "span 1" }}>small</p>
-          <p>small</p>
-          <p>small</p>
-          <p>small</p>
           <div></div>
           <div></div>
           <div></div>
@@ -91,13 +87,26 @@ function RouteComponent() {
           <div></div>
           <div></div>
           <div></div>
+          <div data-span="2">
+            <div className={styles.cardContent}>
+              <h3>Our Approach</h3>
+              <span className="badge">New York, NY 10022</span>
+            </div>
+          </div>
+          <div data-span="3">
+            <p className={styles.cardContent}>
+              Yellown Hill believes that enduring opportunities are built
+              through long-term relationships rather than purely transactional
+              engagement.
+            </p>
+          </div>
           <div></div>
           <div></div>
           <div></div>
           <div></div>
+          <div data-span="2"></div>
           <div></div>
           <div></div>
-          <div></div> <div></div>
         </div>
       </section>
 
