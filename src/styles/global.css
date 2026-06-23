@@ -122,6 +122,9 @@
   .secondary {
     opacity: 0.6;
   }
+  .container-inline {
+    container-type: inline-size;
+  }
 }
 
 @layer components {

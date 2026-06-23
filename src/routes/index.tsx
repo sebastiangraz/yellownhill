@@ -39,31 +39,40 @@ function RouteComponent() {
         />
       </div>
       <section className="fade-parallax bleed ">
-        <div className="startend gap-y-2 center px-4 grid">
-          <span className="badge">Who We Are</span>
-          <h2 className="max-width-prose">
-            Yellown Hill™ is a New York-based strategic capital platform focused
-            on infrastructure, energy, real assets, and cross-border capital
-            relationships.
-          </h2>
-          <p className="max-width-prose">
-            The platform works with investors, corporations, financial
-            institutions, family offices, entrepreneurs, and business owners,
-            supporting long-term relationships and strategic initiatives across
-            global markets.
-          </p>
-          <hr />
-          <span className="badge">Ray Gelbberg · Founder </span>
-          <p className="max-width-prose">
-            Based in New York, Ray works across strategic relationships
-            involving investors, corporations, financial institutions, and
-            family offices throughout North America and the Asia-Pacific region.
-          </p>
-          <p className="max-width-prose">
-            His work is focused on long-term institutional relationships,
-            cross-border opportunities, and the intersection of real assets,
-            infrastructure, and strategic capital.
-          </p>
+        <div className={`startend ${styles.whoWeAre}`}>
+          <div className={styles.whoWeAreLabel}>
+            <span className="badge">Who We Are</span>
+          </div>
+          <div className={styles.whoWeAreContent}>
+            <h2>
+              Yellown Hill™ is a New York-based strategic capital platform
+              focused on infrastructure, energy, real assets, and cross-border
+              capital relationships.
+            </h2>
+            <p>
+              The platform works with investors, corporations, financial
+              institutions, family offices, entrepreneurs, and business owners,
+              supporting long-term relationships and strategic initiatives
+              across global markets.
+            </p>
+          </div>
+
+          <div className={styles.whoWeAreLabel}>
+            <span className="badge">Ray Gelbberg · Founder</span>
+          </div>
+          <div className={styles.whoWeAreContent}>
+            <p>
+              Based in New York, Ray works across strategic relationships
+              involving investors, corporations, financial institutions, and
+              family offices throughout North America and the Asia-Pacific
+              region.
+            </p>
+            <p>
+              His work is focused on long-term institutional relationships,
+              cross-border opportunities, and the intersection of real assets,
+              infrastructure, and strategic capital.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -111,7 +120,7 @@ function RouteComponent() {
 
       {/* Areas of Focus */}
       <section className="bleed fade-parallax">
-        <div className="startend gap-y-2 center px-4 grid">
+        <div className="startend gap-y-2 center px-4 grid container-inline">
           <div className="rows" data-gap="2">
             <span className="badge">Areas of Focus</span>
             <div
@@ -147,7 +156,7 @@ function RouteComponent() {
 
       {/* Contact */}
       <section className="fade-parallax">
-        <div className="startend gap-y-2 center px-4 grid">
+        <div className="startend gap-y-2 center px-4 grid ">
           <span className="badge">Request a Conversation</span>
           <p className="max-width-prose">
             Ray Gelbberg · Founder, New York, NY 10022
