@@ -205,7 +205,9 @@
     grid-auto-rows: max-content;
   }
 
-  *[data-gap] {
+  *[data-gap],
+  *[data-row-gap],
+  *[data-column-gap] {
     --row-gap: 3rlh;
     --column-gap: 3rlh;
 
@@ -216,6 +218,7 @@
       column-gap: var(--column-gap);
     }
 
+    /* both directions */
     &[data-gap="0"] {
       --row-gap: 0;
       --column-gap: 0;
@@ -230,6 +233,34 @@
     }
     &[data-gap="3"] {
       --row-gap: 6rlh;
+      --column-gap: 6rlh;
+    }
+
+    /* row only — overrides the row component of data-gap */
+    &[data-row-gap="0"] {
+      --row-gap: 0;
+    }
+    &[data-row-gap="1"] {
+      --row-gap: 1.5rlh;
+    }
+    &[data-row-gap="2"] {
+      --row-gap: 3rlh;
+    }
+    &[data-row-gap="3"] {
+      --row-gap: 6rlh;
+    }
+
+    /* column only — overrides the column component of data-gap */
+    &[data-column-gap="0"] {
+      --column-gap: 0;
+    }
+    &[data-column-gap="1"] {
+      --column-gap: 1.5rlh;
+    }
+    &[data-column-gap="2"] {
+      --column-gap: 3rlh;
+    }
+    &[data-column-gap="3"] {
       --column-gap: 6rlh;
     }
   }
@@ -299,7 +330,7 @@
     appearance: none;
     font-family: var(--font-sans);
     font-variation-settings: "opsz" 1;
-    font-size: 0.8rlh;
+    font-size: max(0.8125rlh, 11px);
     text-box: unset;
     width: 100%;
     min-height: 3rlh;
@@ -344,7 +375,7 @@
     text-box: trim-both cap alphabetic;
     text-transform: uppercase;
     text-align: center;
-    font-size: 0.75rlh;
+    font-size: max(0.75rlh, 11px);
     font-weight: 450;
     line-height: 1.25;
     background: #000;

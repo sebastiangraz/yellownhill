@@ -125,7 +125,8 @@ function RouteComponent() {
             <span className="badge">Areas of Focus</span>
             <div
               className="columns rows small"
-              data-gap="1"
+              data-row-gap="2"
+              data-column-gap="1"
               style={{ "--columns": 4 } as React.CSSProperties}
             >
               <p>
