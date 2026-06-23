@@ -70,37 +70,20 @@
   }
 }
 
-/* .card {
-  --wrapper: 720px;
-  --gutter: 0px;
-  --cols: 7;
-  --rh: calc(var(--wrapper) / var(--cols));
-
-  background: #333;
-  margin-block: 4rlh;
-
-  display: grid;
-  grid-template-columns: repeat(var(--cols), 1fr);
-  grid-auto-flow: dense;
-  grid-auto-rows: minmax(calc(var(--rh) - var(--gutter)), auto);
-  grid-gap: var(--gutter);
-  & > * {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-} */
-
 .card {
   --wrapper: 720px;
   --gutter: 0px;
   --cols: 5;
-  --edge: minmax(3rlh, auto);
+  --edge: minmax(4rlh, auto);
   --rh: calc(var(--wrapper) / var(--cols));
 
   background: #000;
   color: #fff;
   margin-block: 4rlh;
-
+  overflow: hidden;
+  clip-path: inset(0.5rlh 0.5rlh 0.5rlh 0.5rlh);
+  width: calc(100% + 1rlh);
+  margin-left: -0.5rlh;
   display: grid;
   grid-template-columns: var(--edge) repeat(var(--cols), 1fr) var(--edge);
   grid-auto-columns: var(--edge);
@@ -113,6 +96,13 @@
     var(--edge);
   grid-auto-rows: var(--edge);
   grid-gap: var(--gutter);
+
+  & > *:nth-child(-n + 7) {
+    &:before {
+      border: none;
+    }
+  }
+
   & > * {
     display: grid;
     position: relative;
@@ -131,20 +121,21 @@
       position: relative;
       grid-area: 1 / 1;
       border-top: 1px solid #fff;
-      width: calc(100% - 1rlh);
-      left: 0.5rlh;
+      /* width: calc(100% - 1rlh);
+      left: 0.5rlh; */
     }
   }
-  & .cardTitle {
+  & .cardContent {
+    padding: 2rlh;
+    grid-area: 1 / 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
     gap: 1rlh;
-  }
-  & .cardContent {
-    padding: 2rlh;
-    grid-area: 1 / 1;
+    :global .badge {
+      align-items: end;
+    }
   }
   & [data-span="2"] {
     grid-column: span 2;
@@ -152,4 +143,15 @@
   & [data-span="3"] {
     grid-column: span 3;
   }
+}
+.logoMark {
+  grid-area: 1 / 1;
+  margin-right: 0.3rlh;
+  margin-bottom: 0.3rlh;
+  display: flex;
+  place-self: center;
+  width: 100%;
+  height: 1rlh;
+  object-fit: contain;
+  object-position: center;
 }

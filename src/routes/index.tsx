@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
+import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
 import cloud from "/cloud.jpg";
 
@@ -69,16 +70,6 @@ function RouteComponent() {
       {/* Our Approach */}
       <section className="bleed">
         <div className={`${styles.card} startend gap-y-2 fade-parallax`}>
-          {/* <span className="badge">Our Approach</span> */}
-          {/* <p>
-            Yellown Hill believes that enduring opportunities are built through
-            long-term relationships rather than purely transactional engagement.
-          </p>
-          <p>
-            The platform supports strategic initiatives that benefit from
-            international perspective, trusted networks, and cross-border
-            coordination.
-          </p> */}
           <div></div>
           <div></div>
           <div></div>
@@ -90,23 +81,31 @@ function RouteComponent() {
           <div data-span="2">
             <div className={styles.cardContent}>
               <h3>Our Approach</h3>
-              <span className="badge">New York, NY 10022</span>
+              <span className="badge">New York, NY&nbsp;10022</span>
             </div>
           </div>
           <div data-span="3">
-            <p className={styles.cardContent}>
-              Yellown Hill believes that enduring opportunities are built
-              through long-term relationships rather than purely transactional
-              engagement.
-            </p>
+            <div className={styles.cardContent}>
+              <p className={`small`}>
+                Yellown Hill believes that enduring opportunities are built
+                through long-term relationships rather than purely transactional
+                engagement.
+              </p>
+              <p className={`small`}>
+                The platform supports strategic initiatives that benefit from
+                international perspective, trusted networks, and cross-border
+                coordination.
+              </p>
+            </div>
           </div>
           <div></div>
           <div></div>
           <div></div>
           <div></div>
-          <div data-span="2"></div>
-          <div></div>
-          <div></div>
+          <div data-span="3"></div>
+          <div>
+            <Logo.Mark className={styles.logoMark} />
+          </div>
         </div>
       </section>
 
