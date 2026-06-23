@@ -54,7 +54,7 @@
     transform: translate(calc(-50% + 1px), calc(-50% + 1px));
   }
   @media (min-width: 44rem) {
-    max-width: 16rlh;
+    max-width: 17rlh;
     place-self: center end;
   }
 }
@@ -72,7 +72,7 @@
 
 .whoWeAre {
   display: grid;
-  grid-template-columns: 1fr 22rlh;
+  grid-template-columns: 1fr 23rlh;
   align-items: start;
   padding-block: 6rlh;
 }

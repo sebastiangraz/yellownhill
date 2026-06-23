@@ -38,12 +38,12 @@ function RouteComponent() {
           distortionMode="scatter"
         />
       </div>
-      <section className="fade-parallax bleed ">
+      <section className="bleed ">
         <div className={`startend ${styles.whoWeAre}`}>
           <div className={styles.whoWeAreLabel}>
             <span className="badge">Who We Are</span>
           </div>
-          <div className={styles.whoWeAreContent}>
+          <div className={`${styles.whoWeAreContent} fade-parallax`}>
             <h2>
               Yellown Hill™ is a New York-based strategic capital platform
               focused on infrastructure, energy, real assets, and cross-border
@@ -58,14 +58,14 @@ function RouteComponent() {
           </div>
 
           <div className={styles.whoWeAreLabel}>
-            <span className="badge">Ray Gelbberg · Founder</span>
+            <span className="badge">Founder</span>
           </div>
-          <div className={styles.whoWeAreContent}>
+          <div className={`${styles.whoWeAreContent} fade-parallax`}>
             <p>
-              Based in New York, Ray works across strategic relationships
-              involving investors, corporations, financial institutions, and
-              family offices throughout North America and the Asia-Pacific
-              region.
+              Ray Gelbberg is based in New York, working across strategic
+              relationships involving investors, corporations, financial
+              institutions, and family offices throughout North America and the
+              Asia-Pacific region.
             </p>
             <p>
               His work is focused on long-term institutional relationships,
