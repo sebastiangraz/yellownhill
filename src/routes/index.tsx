@@ -21,7 +21,7 @@ function RouteComponent() {
 
     setStatus("submitting");
     try {
-      const res = await fetch("/__forms.html", {
+      const res = await fetch("/", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams(data as unknown as Record<string, string>),
