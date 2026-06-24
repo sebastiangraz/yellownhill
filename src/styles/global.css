@@ -48,6 +48,11 @@
     text-box: trim-both ex alphabetic;
   }
 
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
   @font-face {
     font-family: "Forma DJR";
     src: url("/fonts/FormaDJR.woff2") format("woff2");
