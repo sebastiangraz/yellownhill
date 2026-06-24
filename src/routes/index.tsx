@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
 import { Logo } from "~/components/Logo/Logo";
@@ -8,7 +9,32 @@ export const Route = createFileRoute("/")({
   component: RouteComponent,
 });
 
+type ContactStatus = "idle" | "submitting" | "success" | "error";
+
 function RouteComponent() {
+  const [status, setStatus] = useState<ContactStatus>("idle");
+
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    setStatus("submitting");
+    try {
+      const res = await fetch("/__forms.html", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(data as unknown as Record<string, string>),
+      });
+      if (!res.ok) throw new Error(`Submission failed: ${res.status}`);
+      form.reset();
+      setStatus("success");
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
+  };
+
   return (
     <>
       {/* Hero */}
@@ -167,28 +193,55 @@ function RouteComponent() {
             Ray Gelbberg · Founder, New York, NY 10022
           </p>
           <form
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
             className={`${styles.contactForm} max-width-prose`}
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSubmit}
           >
+            <input type="hidden" name="form-name" value="contact" />
+            <p hidden>
+              <label>
+                Don’t fill this out: <input name="bot-field" />
+              </label>
+            </p>
             <input
               type="text"
               name="name"
               placeholder="Name"
               aria-label="Name"
+              required
             />
             <input
               type="email"
               name="email"
               placeholder="Email"
               aria-label="Email"
+              required
             />
             <textarea
               name="message"
               placeholder="Message"
               aria-label="Message"
               rows={4}
+              required
             />
-            <button type="submit">Send</button>
+            <button type="submit" disabled={status === "submitting"}>
+              {status === "submitting" ? "Sending…" : "Send"}
+            </button>
+            {status === "success" && (
+              <p role="status" className="small">
+                Thank you — your message has been sent.
+              </p>
+            )}
+            {status === "error" && (
+              <p role="alert" className="small">
+                Something went wrong. Please email{" "}
+                <a href="mailto:ray@yellownhill.com">ray@yellownhill.com</a>{" "}
+                directly.
+              </p>
+            )}
           </form>
         </div>
       </section>
