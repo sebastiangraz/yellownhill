@@ -22,13 +22,13 @@ function RouteComponent() {
         <TileDistort
           src={birdref}
           className={styles.tile}
-          gridCols={16}
+          gridCols={18}
           distortionAmount={40}
           originX={0}
           originY={0}
           falloffCurve="ease-out"
           falloffPower={0.4}
-          tileGap={1}
+          tileGap={0.5}
           seed={1}
           animate={true}
           stagger={2000}
@@ -36,6 +36,8 @@ function RouteComponent() {
           staggerInvert={true}
           animationRange={0.4}
           distortionMode="scatter"
+          srcBackdrop={true}
+          borderColor="hsla(0, 0%, 0%, 0.2)"
         />
       </div>
       <section className="bleed ">

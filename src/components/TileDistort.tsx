@@ -53,6 +53,13 @@ const DEFAULTS = {
    *  (undistorted → distorted). 0.1 = start at 90% distorted and animate only
    *  the final 10%. */
   animationRange: 1,
+  /** Draw the original (undistorted) image behind the tiles on the canvas, so
+   *  the inter-tile gaps reveal the source image instead of transparency. */
+  srcBackdrop: false,
+  /** Fill color painted behind the tiles (on top of srcBackdrop). When set and
+   *  tileGap > 0, this becomes the color of the gaps ("grout"). Accepts any CSS
+   *  color: hex, rgb(a), hsl(a), named colors, or var(--token). Empty = off. */
+  borderColor: "",
 };
 
 /* -------------------------------------------------------------------------- */
@@ -74,6 +81,19 @@ function mulberry32(seed: number) {
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
+}
+
+/** Resolves a CSS color string to one canvas can use. Plain colors (hex, rgb,
+ *  hsl, named) pass through; var(--token) is resolved against `el`'s cascade. */
+function resolveColor(color: string, el: HTMLElement): string {
+  if (!color.includes("var(")) return color;
+  const probe = document.createElement("span");
+  probe.style.color = color;
+  probe.style.display = "none";
+  el.appendChild(probe);
+  const resolved = getComputedStyle(probe).color;
+  el.removeChild(probe);
+  return resolved;
 }
 
 /** Maps normalized distance t (0..1) to an intensity multiplier (0..1). */
@@ -142,6 +162,11 @@ export type TileDistortProps = {
   staggerInvert?: boolean;
   /** Fraction of the distortion to animate, 0..1 (1 = full travel). */
   animationRange?: number;
+  /** Draw the original image behind the tiles to hide the inter-tile gaps. */
+  srcBackdrop?: boolean;
+  /** Color of the tile gaps, painted behind the tiles (on top of srcBackdrop).
+   *  Accepts hex, rgb(a), hsl(a), named colors, or var(--token). */
+  borderColor?: string;
 };
 
 export function TileDistort({
@@ -163,6 +188,8 @@ export function TileDistort({
   duration = DEFAULTS.duration,
   staggerInvert = DEFAULTS.staggerInvert,
   animationRange = DEFAULTS.animationRange,
+  srcBackdrop = DEFAULTS.srcBackdrop,
+  borderColor = DEFAULTS.borderColor,
 }: TileDistortProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const wrapRef = React.useRef<HTMLDivElement>(null);
@@ -194,6 +221,10 @@ export function TileDistort({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Resolve once per effect run so var(--token) is read in the wrap's cascade
+    // and we don't touch the DOM every animation frame.
+    const fillColor = borderColor ? resolveColor(borderColor, wrap) : "";
+
     // elapsed === null  → fully settled (final) frame
     // elapsed is ms      → animated frame at that time since start
     const draw = (elapsed: number | null) => {
@@ -224,6 +255,20 @@ export function TileDistort({
       const srcOffY = (img.height - visibleH) / 2;
       const srcTileW = visibleW / cols;
       const srcTileH = visibleH / rows;
+
+      // Backdrop: paint the original "cover"-mapped image first so the tiles
+      // (and their gaps) sit on top of it. The gaps reveal the source image
+      // instead of transparency.
+      if (srcBackdrop) {
+        ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
+      }
+
+      // Gap color: painted on top of the srcBackdrop, behind the tiles. With
+      // tileGap > 0 the uncovered gaps show this color ("grout").
+      if (fillColor) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, w, h);
+      }
 
       const maxDist = Math.hypot(
         Math.max(originX, 1 - originX),
@@ -397,6 +442,8 @@ export function TileDistort({
     duration,
     staggerInvert,
     animationRange,
+    srcBackdrop,
+    borderColor,
   ]);
 
   return (
