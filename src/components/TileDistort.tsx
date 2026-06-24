@@ -42,6 +42,9 @@ const DEFAULTS = {
   seed: 1337,
   /** When true, tiles fade in and slide from undistorted → distorted on mount. */
   animate: false,
+  /** When true, tiles fade in (alpha 0→1) as they animate. When false, tiles
+   *  are fully opaque and only slide into place. Requires animate. */
+  animationFade: true,
   /** Total stagger spread, in ms, between the first and last tile to animate.
    *  Ordering follows distance from the origin (see staggerInvert). */
   stagger: 700,
@@ -154,6 +157,9 @@ export type TileDistortProps = {
   seed?: number;
   /** Animate tiles in (fade + slide from undistorted to distorted). */
   animate?: boolean;
+  /** Fade tiles in (alpha 0→1) during the animation. When false, tiles stay
+   *  opaque and only slide. Requires animate. */
+  animationFade?: boolean;
   /** Total stagger spread between first and last tile, in ms. */
   stagger?: number;
   /** Duration of a single tile's animation, in ms. */
@@ -184,6 +190,7 @@ export function TileDistort({
   rotationAmount = DEFAULTS.rotationAmount,
   seed = DEFAULTS.seed,
   animate = DEFAULTS.animate,
+  animationFade = DEFAULTS.animationFade,
   stagger = DEFAULTS.stagger,
   duration = DEFAULTS.duration,
   staggerInvert = DEFAULTS.staggerInvert,
@@ -306,7 +313,8 @@ export function TileDistort({
             const delay = order * stagger;
             prog = easeOutCubic(clamp01((elapsed - delay) / duration));
           }
-          const alpha = prog;
+          // Fade is opt-in: when animationFade is off, tiles only slide in.
+          const alpha = animationFade ? prog : 1;
           // Spatial travel: only `animationRange` of the distortion is animated;
           // the remainder is applied immediately as a static starting offset.
           const range = clamp01(animationRange);
@@ -438,6 +446,7 @@ export function TileDistort({
     rotationAmount,
     seed,
     animate,
+    animationFade,
     stagger,
     duration,
     staggerInvert,

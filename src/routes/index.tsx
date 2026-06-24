@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
 import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
-import birdref from "/birdref.png";
+import birdref2 from "/birdref2.png";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -20,21 +20,23 @@ function RouteComponent() {
           </h1>{" "}
         </div>
         <TileDistort
-          src={birdref}
+          src={birdref2}
           className={styles.tile}
           gridCols={18}
-          distortionAmount={40}
+          distortionAmount={50}
           originX={0}
           originY={0}
           falloffCurve="ease-out"
           falloffPower={0.4}
           tileGap={0.5}
-          seed={1}
+          seed={11}
           animate={true}
-          stagger={2000}
-          duration={3000}
+          stagger={3000}
+          duration={6000}
           staggerInvert={true}
           animationRange={0.4}
+          animationFade={false}
+          rotationAmount={360}
           distortionMode="scatter"
           srcBackdrop={true}
           borderColor="hsla(0, 0%, 0%, 0.2)"
