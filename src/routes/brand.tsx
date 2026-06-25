@@ -12,6 +12,7 @@ import sky from "/sky.png";
 import pastelscrapers from "/pastelscrapers.jpg";
 import skyscraper from "/skyscraper.jpg";
 import building from "/building.jpg";
+import birdclouds from "/birdref2.png";
 import buildingAlt from "/building-alt.jpg";
 import cloud from "/cloud.jpg";
 
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/brand")({
 });
 
 /** Where the downloadable asset bundle lives. Drop the zip in /public. */
-const ASSETS_ZIP = "/yellown-hill-brand-assets.zip";
+const ASSETS_ZIP = "/logotypes.zip";
 
 const COLORS = [
   { name: "Paper", hex: "#dfdfdc" },
@@ -68,23 +69,23 @@ type Config = {
 };
 
 const INITIAL_CONFIG: Config = {
-  gridCols: 24,
-  tileGap: 1,
-  distortionAmount: 64,
+  gridCols: 18,
+  tileGap: 0.5,
+  distortionAmount: 50,
   originX: 0.5,
   originY: 0.5,
-  falloffCurve: "ease-in",
-  falloffPower: 2.4,
+  falloffCurve: "ease-out",
+  falloffPower: 0.6,
   invertFalloff: false,
   distortionMode: "scatter",
-  rotationAmount: 4,
-  seed: 1337,
-  srcBackdrop: false,
-  animate: false,
+  rotationAmount: 0,
+  seed: 11,
+  srcBackdrop: true,
+  animate: true,
   animationFade: false,
-  staggerInvert: false,
-  stagger: 700,
-  duration: 800,
+  staggerInvert: true,
+  stagger: 400,
+  duration: 1000,
   animationRange: 1,
 };
 
@@ -150,6 +151,7 @@ function toRgba(hex: string, alpha: number): string {
 const PRESETS: { label: string; src: string }[] = [
   { label: "Towers", src: pastelscrapers },
   { label: "Skyscraper", src: skyscraper },
+  { label: "Birdclouds", src: birdclouds },
   { label: "Brick", src: building },
   { label: "Curves", src: buildingAlt },
   { label: "Clouds", src: cloud },
@@ -159,12 +161,12 @@ const PRESETS: { label: string; src: string }[] = [
 
 function RouteComponent() {
   // Preload the first sample so the generator is always visible on load.
-  const [src, setSrc] = React.useState<string>(PRESETS[0].src);
+  const [src, setSrc] = React.useState<string>(PRESETS[2].src);
   const [config, setConfig] = React.useState<Config>(INITIAL_CONFIG);
   // Grout color is managed separately so it can carry an alpha channel; an
   // alpha of 0 means "off" (empty borderColor → no grout fill).
   const [groutHex, setGroutHex] = React.useState("#000000");
-  const [groutAlpha, setGroutAlpha] = React.useState(0);
+  const [groutAlpha, setGroutAlpha] = React.useState(0.2);
   const borderColor = groutAlpha > 0 ? toRgba(groutHex, groutAlpha) : "";
 
   const set = <K extends keyof Config>(key: K, value: Config[K]) =>
@@ -173,7 +175,7 @@ function RouteComponent() {
   const reset = () => {
     setConfig(INITIAL_CONFIG);
     setGroutHex("#000000");
-    setGroutAlpha(0);
+    setGroutAlpha(0.2);
   };
 
   // Revoke object URLs when they change / unmount to avoid leaks.
@@ -201,7 +203,7 @@ function RouteComponent() {
             </p>
           </div>
           <a className="badge" href={ASSETS_ZIP} download>
-            Assets.zip
+            Logotypes.zip
           </a>
         </div>
       </section>
