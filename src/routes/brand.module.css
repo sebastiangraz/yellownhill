@@ -1,0 +1,309 @@
+.page {
+  display: grid;
+  gap: 0;
+}
+
+/* Section bodies sit in the readable column, with vertical breathing room. */
+.section {
+  padding-block: 4rlh;
+}
+
+.sectionHead {
+  display: grid;
+  gap: 1rlh;
+  margin-bottom: 2rlh;
+}
+
+.sectionHead p {
+  max-width: 36rlh;
+}
+
+/* Logotype ----------------------------------------------------------------- */
+.logoStage {
+  display: grid;
+  gap: 2rlh;
+}
+
+.logoFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 4rlh;
+  padding-inline: 2rlh;
+  box-shadow: inset 0 0 0 1px #0001;
+}
+
+.logoFrame svg {
+  width: min(24rlh, 100%);
+  height: auto;
+  color: #000;
+}
+
+.logoFrame[data-variant="mark"] svg {
+  width: min(6rlh, 40%);
+}
+
+.logoFrame[data-variant="inverse"] {
+  background: #000;
+}
+
+.logoFrame[data-variant="inverse"] svg {
+  color: #dfdfdc;
+}
+
+.logoRow {
+  display: grid;
+  gap: 1rlh;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 44rem) {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+/* Colors ------------------------------------------------------------------- */
+.swatches {
+  display: grid;
+  gap: 1rlh;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 32rem) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.swatch {
+  display: grid;
+  gap: 0.5rlh;
+}
+
+.swatchChip {
+  aspect-ratio: 16 / 9;
+  box-shadow: inset 0 0 0 1px #0002;
+}
+
+.swatchMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rlh;
+}
+
+/* Typography --------------------------------------------------------------- */
+.typeList {
+  display: grid;
+  gap: 3rlh;
+}
+
+.typeSpecimen {
+  display: grid;
+  gap: 1rlh;
+  padding-block: 2rlh;
+  border-top: 1px solid #0001;
+}
+
+.typeSpecimen:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.typeName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rlh;
+}
+
+.typeSample {
+  font-size: 2rlh;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.typeGlyphs {
+  font-size: 1.25rlh;
+  opacity: 0.7;
+  word-spacing: 0.25rlh;
+}
+
+/* Tile generator examples -------------------------------------------------- */
+.examples {
+  display: grid;
+  gap: 1rlh;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 32rem) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.example {
+  display: grid;
+  gap: 0.5rlh;
+}
+
+.exampleTile {
+  aspect-ratio: 1 / 1;
+  position: relative;
+  width: 100%;
+  box-shadow: inset 0 0 0 1px #0001;
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.generator {
+  display: grid;
+  gap: 2rlh;
+  margin-top: 4rlh;
+  padding-top: 4rlh;
+  border-top: 1px solid #0001;
+}
+
+.picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rlh;
+}
+
+/* Thumbnails are <button>/<label> elements — override the global button look. */
+.thumb {
+  width: 3rlh;
+  height: 3rlh;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background-color: transparent;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 0 1px #0002;
+  opacity: 0.5;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.thumb:hover {
+  opacity: 1;
+}
+
+.thumb[data-active="true"] {
+  opacity: 1;
+  box-shadow: 0 0 0 1.5px #000;
+}
+
+.thumbUpload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font-size: 1.5rlh;
+  line-height: 1;
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px #0003;
+}
+
+.generatorBody {
+  display: grid;
+  gap: 2rlh;
+  align-items: start;
+
+  @media (min-width: 44rem) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+}
+
+.generatorTile {
+  aspect-ratio: 1 / 1;
+  position: relative;
+  width: 100%;
+
+  @media (min-width: 44rem) {
+    position: sticky;
+    top: 2rlh;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.controls {
+  display: grid;
+  gap: 1.5rlh;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+}
+
+.control {
+  display: grid;
+  gap: 0.5rlh;
+  min-width: 0;
+}
+
+.control .badge {
+  justify-content: space-between;
+}
+
+.controlValue {
+  font-family: var(--font-sans);
+  opacity: 0.5;
+  font-variant-numeric: tabular-nums;
+}
+
+.control input[type="range"] {
+  width: 100%;
+  accent-color: #000;
+  cursor: pointer;
+}
+
+.control select,
+.control input[type="color"] {
+  appearance: none;
+  font-family: var(--font-sans);
+  font-variation-settings: "opsz" 1;
+  font-size: max(0.8125rlh, 11px);
+  width: 100%;
+  height: 2rlh;
+  padding-inline: 0.75rlh;
+  background: transparent;
+  box-shadow: 0 0 0 1px #0002;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+.control input[type="color"] {
+  padding: 2px;
+}
+
+.toggles {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rlh 1.5rlh;
+  padding-top: 0.5rlh;
+}
+
+.toggle {
+  gap: 0.5rlh;
+  cursor: pointer;
+}
+
+.toggle input[type="checkbox"] {
+  accent-color: #000;
+  cursor: pointer;
+}
+
+.reset {
+  grid-column: 1 / -1;
+  justify-self: start;
+}

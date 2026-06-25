@@ -44,7 +44,7 @@ const DEFAULTS = {
   animate: false,
   /** When true, tiles fade in (alpha 0→1) as they animate. When false, tiles
    *  are fully opaque and only slide into place. Requires animate. */
-  animationFade: true,
+  animationFade: false,
   /** Total stagger spread, in ms, between the first and last tile to animate.
    *  Ordering follows distance from the origin (see staggerInvert). */
   stagger: 700,

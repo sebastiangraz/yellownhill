@@ -299,6 +299,7 @@
     font-size: max(0.75rlh, 10px);
     height: 1rlh;
     display: inline-flex;
+    gap: 0.25rlh;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
