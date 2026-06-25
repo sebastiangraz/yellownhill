@@ -7,6 +7,7 @@ import {
   Outlet,
   Scripts,
   createRootRoute,
+  useRouterState,
 } from "@tanstack/react-router";
 
 import globalCss from "~/styles/global.css?url";
@@ -32,6 +33,10 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  const isHome = useRouterState({
+    select: (s) => s.location.pathname === "/",
+  });
+
   return (
     <html>
       <head>
@@ -40,7 +45,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <div className="container navigation">
           <nav>
-            <Logo />
+            {isHome ? (
+              <Logo />
+            ) : (
+              <Link to="/" aria-label="Yellown Hill — home">
+                <Logo />
+              </Link>
+            )}
             <span className="badge">New York, NY 10022</span>
           </nav>
         </div>
