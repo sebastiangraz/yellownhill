@@ -142,9 +142,7 @@ function RouteComponent() {
           <div></div>
           <div></div>
           <div data-span="3"></div>
-          <div>
-            <Logo.Mark className={styles.logoMark} />
-          </div>
+          <div></div>
         </div>
       </section>
 

@@ -3,7 +3,7 @@
   gap: 0;
 } */
 
-section:first-of-type {
+.firstSection {
   border-top: none;
 }
 
@@ -53,16 +53,6 @@ section:first-of-type {
 
 .logoFrame[data-variant="inverse"] svg {
   color: #dfdfdc;
-}
-
-.logoRow {
-  display: grid;
-  gap: 1rlh;
-  grid-template-columns: 1fr;
-
-  @media (min-width: 44rem) {
-    grid-template-columns: 2fr 1fr;
-  }
 }
 
 /* Colors ------------------------------------------------------------------- */

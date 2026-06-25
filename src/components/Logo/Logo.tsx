@@ -51,5 +51,5 @@ export const LogoMark = (props: LogoProps) => {
   );
 };
 
-Logo.Mark = LogoMark;
+// Logo.Mark = LogoMark;
 export default Logo;

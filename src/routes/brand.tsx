@@ -193,7 +193,7 @@ function RouteComponent() {
   return (
     <>
       {/* Intro */}
-      <section className="bleed">
+      <section className={`bleed ${styles.firstSection}`}>
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
             <h1>Brand</h1>
@@ -221,9 +221,6 @@ function RouteComponent() {
             <div className={styles.logoRow}>
               <div className={styles.logoFrame} data-variant="inverse">
                 <Logo />
-              </div>
-              <div className={styles.logoFrame} data-variant="mark">
-                <Logo.Mark />
               </div>
             </div>
           </div>
