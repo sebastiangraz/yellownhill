@@ -30,13 +30,13 @@ const COLORS = [
 const TYPEFACES = [
   {
     name: "Affairs",
-    role: "Serif · Headlines & body",
+    role: "Headlines & body",
     family: "var(--font-serif)",
     style: undefined as React.CSSProperties | undefined,
   },
   {
     name: "Inter",
-    role: "Sans · UI, labels & forms",
+    role: "UI, labels & forms",
     family: "var(--font-sans)",
     style: { fontVariationSettings: '"opsz" 1' } as React.CSSProperties,
   },
@@ -59,7 +59,6 @@ type Config = {
   rotationAmount: number;
   seed: number;
   srcBackdrop: boolean;
-  borderColor: string;
   animate: boolean;
   animationFade: boolean;
   staggerInvert: boolean;
@@ -81,7 +80,6 @@ const INITIAL_CONFIG: Config = {
   rotationAmount: 4,
   seed: 1337,
   srcBackdrop: false,
-  borderColor: "",
   animate: false,
   animationFade: false,
   staggerInvert: false,
@@ -138,6 +136,16 @@ const DISTORTION_MODES: DistortionMode[] = [
   "horizontal",
 ];
 
+/** Compose a "#rrggbb" hex + 0..1 alpha into an rgba() string the canvas can
+ *  use, so the grout color can carry an alpha channel the native picker can't. */
+function toRgba(hex: string, alpha: number): string {
+  const h = hex.replace("#", "");
+  const r = parseInt(h.slice(0, 2), 16);
+  const g = parseInt(h.slice(2, 4), 16);
+  const b = parseInt(h.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 /** Bundled sample images offered as one-click presets in the generator. */
 const PRESETS: { label: string; src: string }[] = [
   { label: "Towers", src: pastelscrapers },
@@ -153,9 +161,20 @@ function RouteComponent() {
   // Preload the first sample so the generator is always visible on load.
   const [src, setSrc] = React.useState<string>(PRESETS[0].src);
   const [config, setConfig] = React.useState<Config>(INITIAL_CONFIG);
+  // Grout color is managed separately so it can carry an alpha channel; an
+  // alpha of 0 means "off" (empty borderColor → no grout fill).
+  const [groutHex, setGroutHex] = React.useState("#000000");
+  const [groutAlpha, setGroutAlpha] = React.useState(0);
+  const borderColor = groutAlpha > 0 ? toRgba(groutHex, groutAlpha) : "";
 
   const set = <K extends keyof Config>(key: K, value: Config[K]) =>
     setConfig((c) => ({ ...c, [key]: value }));
+
+  const reset = () => {
+    setConfig(INITIAL_CONFIG);
+    setGroutHex("#000000");
+    setGroutAlpha(0);
+  };
 
   // Revoke object URLs when they change / unmount to avoid leaks.
   React.useEffect(() => {
@@ -170,21 +189,19 @@ function RouteComponent() {
   };
 
   return (
-    <div className={styles.page}>
+    <>
       {/* Intro */}
       <section className="bleed">
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
-            <span className="badge">Brand</span>
-            <h1>Yellown Hill™ brand elements.</h1>
+            <h1>Brand</h1>
+
             <p className="secondary">
-              The core building blocks of the identity — logotype, colors,
-              typefaces, and the generative tile system. Download the full asset
-              package below.
+              The core building blocks of Yellown Hill.
             </p>
           </div>
           <a className="badge" href={ASSETS_ZIP} download>
-            Download brand assets (.zip) →
+            Assets.zip
           </a>
         </div>
       </section>
@@ -194,11 +211,6 @@ function RouteComponent() {
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
             <span className="badge">Logotype</span>
-            <p className="secondary">
-              The wordmark is the primary lockup. The mark may be used on its
-              own where space is constrained. Maintain clear space and use only
-              the approved colors.
-            </p>
           </div>
 
           <div className={styles.logoStage}>
@@ -222,9 +234,6 @@ function RouteComponent() {
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
             <span className="badge">Color</span>
-            <p className="secondary">
-              Two colors carry the identity: a warm paper and a pure ink.
-            </p>
           </div>
 
           <div className={styles.swatches}>
@@ -249,7 +258,6 @@ function RouteComponent() {
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
             <span className="badge">Typography</span>
-            <p className="secondary">Two typefaces pair across the identity.</p>
           </div>
 
           <div className={styles.typeList}>
@@ -259,15 +267,13 @@ function RouteComponent() {
                 className={styles.typeSpecimen}
                 style={{ fontFamily: t.family, ...t.style }}
               >
-                <div className={styles.typeName}>
-                  <span className="badge">{t.name}</span>
-                  <span className="badge secondary">{t.role}</span>
-                </div>
+                <h1>{t.name}</h1>
                 <div className={styles.typeSample}>
                   Strategic capital relationships across borders.
                 </div>
-                <div className={styles.typeGlyphs}>
-                  AaBbCcDdEe 0123456789 &amp; ?!
+                <div className={styles.typeGlyphs}>AaBbCcDdEe 0123456789</div>{" "}
+                <div className={styles.typeName}>
+                  <span className="badge secondary">{t.role}</span>
                 </div>
               </div>
             ))}
@@ -279,15 +285,10 @@ function RouteComponent() {
       <section className="bleed">
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
-            <span className="badge">Generative · Tile System</span>
-            <p className="secondary">
-              Source imagery is sliced into a grid; each tile drifts from its
-              home position to create the signature distortion. Two prerendered
-              examples below, plus a live generator to try your own image.
-            </p>
+            <span className="badge">Generative Tile</span>
           </div>
 
-          <div className={styles.examples}>
+          {/* <div className={styles.examples}>
             <div className={styles.example}>
               <div className={styles.exampleTile}>
                 <TileDistort
@@ -328,7 +329,7 @@ function RouteComponent() {
               </div>
               <span className="badge secondary">Example — radial</span>
             </div>
-          </div>
+          </div> */}
 
           <div className={styles.generator}>
             <div className={styles.picker}>
@@ -361,7 +362,7 @@ function RouteComponent() {
 
             <div className={styles.generatorBody}>
               <div className={styles.generatorTile}>
-                <TileDistort src={src} {...config} />
+                <TileDistort src={src} {...config} borderColor={borderColor} />
               </div>
 
               <div className={styles.controls}>
@@ -372,8 +373,17 @@ function RouteComponent() {
                     value={config[s.key] as number}
                     onChange={(v) => set(s.key, v as Config[typeof s.key])}
                   />
-                ))}
-
+                ))}{" "}
+                {config.animate
+                  ? ANIM_SLIDERS.map((s) => (
+                      <Slider
+                        key={s.key}
+                        def={s}
+                        value={config[s.key] as number}
+                        onChange={(v) => set(s.key, v as Config[typeof s.key])}
+                      />
+                    ))
+                  : null}
                 <label className={styles.control}>
                   <span className="badge">Falloff curve</span>
                   <select
@@ -389,7 +399,6 @@ function RouteComponent() {
                     ))}
                   </select>
                 </label>
-
                 <label className={styles.control}>
                   <span className="badge">Distortion mode</span>
                   <select
@@ -404,30 +413,32 @@ function RouteComponent() {
                       </option>
                     ))}
                   </select>
-                </label>
-
-                <label className={styles.control}>
+                </label>{" "}
+                <div className={`${styles.control} ${styles.grout}`}>
                   <span className="badge">
-                    Grout color {config.borderColor ? "" : "(off)"}
+                    Grout color
+                    <span className={styles.controlValue}>
+                      {borderColor || "off"}
+                    </span>
                   </span>
-                  <input
-                    type="color"
-                    value={config.borderColor || "#000000"}
-                    onChange={(e) => set("borderColor", e.target.value)}
-                  />
-                </label>
-
-                {config.animate
-                  ? ANIM_SLIDERS.map((s) => (
-                      <Slider
-                        key={s.key}
-                        def={s}
-                        value={config[s.key] as number}
-                        onChange={(v) => set(s.key, v as Config[typeof s.key])}
-                      />
-                    ))
-                  : null}
-
+                  <div className={styles.groutRow}>
+                    <input
+                      type="color"
+                      value={groutHex}
+                      onChange={(e) => setGroutHex(e.target.value)}
+                      aria-label="Grout color"
+                    />
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      value={groutAlpha}
+                      onChange={(e) => setGroutAlpha(Number(e.target.value))}
+                      aria-label="Grout opacity"
+                    />
+                  </div>
+                </div>
                 <div className={styles.toggles}>
                   {TOGGLES.map((t) => (
                     <label key={t.key} className={`badge ${styles.toggle}`}>
@@ -442,12 +453,7 @@ function RouteComponent() {
                     </label>
                   ))}
                 </div>
-
-                <button
-                  type="button"
-                  className={styles.reset}
-                  onClick={() => setConfig(INITIAL_CONFIG)}
-                >
+                <button type="button" className={styles.reset} onClick={reset}>
                   Reset
                 </button>
               </div>
@@ -455,7 +461,7 @@ function RouteComponent() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 

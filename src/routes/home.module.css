@@ -38,10 +38,6 @@
   pointer-events: none;
 
   h1 {
-    /* text-box: trim-both ex alphabetic; */
-    font-size: 2.375rlh;
-    line-height: 1.175;
-    letter-spacing: -0.03em;
     max-width: 18ch;
   }
 }

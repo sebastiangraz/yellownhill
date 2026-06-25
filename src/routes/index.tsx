@@ -152,7 +152,7 @@ function RouteComponent() {
       <section className="bleed fade-parallax">
         <div className="startend gap-y-2 center px-4 grid container-inline">
           <div className="rows" data-gap="2">
-            <span className="badge">Areas of Focus</span>
+            <span className="badge center">Areas of Focus</span>
             <div
               className="columns rows small"
               data-row-gap="2"
