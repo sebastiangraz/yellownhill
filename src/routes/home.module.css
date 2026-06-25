@@ -1,16 +1,24 @@
 .hero {
   display: grid;
   border-inline: 1px solid #0001;
+  justify-content: center;
+  text-align: center;
   margin-block: 1rlh;
-  padding-inline: 3rlh;
+  padding-inline: 1.5rlh;
   padding-block: 2rlh;
   gap: 3rlh;
-  width: round(nearest, 100%, 1rlh);
   /* background-image:
     linear-gradient(to right, #00000005 1px, transparent 1px),
     linear-gradient(#00000005 1px, transparent 1px);
   background-size: 1rlh 1rlh;
   background-position: 100% 0px; */
+
+  @media (min-width: 44rem) {
+    justify-content: unset;
+    text-align: left;
+    margin-block: 1rlh;
+    padding-inline: 3rlh;
+  }
 }
 
 .hero > * {
@@ -31,7 +39,7 @@
 
   h1 {
     /* text-box: trim-both ex alphabetic; */
-    font-size: 2.5rlh;
+    font-size: 2.375rlh;
     line-height: 1.175;
     letter-spacing: -0.03em;
     max-width: 18ch;
@@ -42,7 +50,9 @@
   aspect-ratio: 1 / 1;
   position: relative;
   width: 100%;
-  place-self: center start;
+  place-self: center center;
+  max-width: 17rlh;
+
   canvas {
     position: absolute;
     top: 50%;
@@ -54,7 +64,6 @@
     transform: translate(calc(-50% + 1px), calc(-50% + 1px));
   }
   @media (min-width: 44rem) {
-    max-width: 17rlh;
     place-self: center end;
   }
 }
@@ -95,7 +104,7 @@
   row-gap: 1.5rlh;
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 32rem) {
   .whoWeAre {
     grid-template-columns: 1fr;
     align-items: stretch;

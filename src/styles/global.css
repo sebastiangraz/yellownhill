@@ -125,11 +125,21 @@
     flex-wrap: wrap;
     row-gap: 1rlh;
     column-gap: 2rlh;
-    justify-content: space-between;
+
+    justify-content: center;
     align-items: center;
-    padding: 4rlh 3rlh 1rlh 3rlh;
+    padding: 4rlh 1.5rlh 1rlh 1.5rlh;
     margin-bottom: 1rlh;
     border-inline: 1px solid #0001;
+
+    /* @media (min-width: 32rem) {
+      justify-content: space-between;
+      padding: 4rlh 1.5rlh 1rlh 1.5rlh;
+    } */
+    @media (min-width: 44rem) {
+      justify-content: space-between;
+      padding: 4rlh 3rlh 1rlh 3rlh;
+    }
   }
 
   .navigation {
