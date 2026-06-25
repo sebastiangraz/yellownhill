@@ -22,13 +22,13 @@ function RouteComponent() {
   };
 
   return (
-    <section className="fade-parallax">
+    <div className="fade-parallax">
       <div className="startend gap-y-2 center px-3 grid">
         <span className="badge">Generative · Tile Distortion</span>
         <p className="max-width-prose small secondary">
           Choose an image. It is sliced into a grid; each tile drifts from its
           home position. Art-direct the effect via the constants at the top of
-          <span className="mono"> TileDistort.tsx</span>.
+          TileDistort.tsx.
         </p>
 
         <label className="badge" style={{ cursor: "pointer" }}>
@@ -55,6 +55,6 @@ function RouteComponent() {
           />
         ) : null}
       </div>
-    </section>
+    </div>
   );
 }

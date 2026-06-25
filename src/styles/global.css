@@ -15,7 +15,7 @@
 
     --font-serif: "Affairs", Georgia, "Times New Roman", serif;
     --font-sans:
-      "Forma DJR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
     line-height: var(--scale-default);
   }
@@ -34,11 +34,6 @@
   }
 
   h2 {
-    /* font-family: var(--font-sans);
-    font-variation-settings:
-      "wdth" 100,
-      "opsz" 21,
-      "wght" 450; */
     font-size: 1.25rlh;
     line-height: 1.3334;
   }
@@ -54,8 +49,8 @@
   }
 
   @font-face {
-    font-family: "Forma DJR";
-    src: url("/fonts/FormaDJR.woff2") format("woff2");
+    font-family: "Inter";
+    src: url("/fonts/InterVariable.ttf") format("truetype");
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
@@ -74,14 +69,6 @@
     src: url("/fonts/Affairs-Italic.woff2") format("woff2");
     font-weight: 400;
     font-style: italic;
-    font-display: swap;
-  }
-
-  @font-face {
-    font-family: "Affairs Mono";
-    src: url("/fonts/Affairs-Mono.woff2") format("woff2");
-    font-weight: 400;
-    font-style: normal;
     font-display: swap;
   }
 }
@@ -120,7 +107,7 @@
   }
 
   .small {
-    font-size: 0.8125rlh;
+    font-size: max(0.8125rlh, 11px);
     line-height: 1.5;
   }
 
@@ -174,10 +161,6 @@
     grid-column: bleedstart / bleedend;
   }
 
-  .mono {
-    font-family: "Affairs Mono", monospace;
-    text-transform: uppercase;
-  }
   .sans {
     font-family: var(--font-sans);
     font-variation-settings: "opsz" 1;
@@ -303,7 +286,7 @@
 
   .badge {
     font-family: var(--font-serif);
-    font-size: 0.75rlh;
+    font-size: max(0.75rlh, 10px);
     height: 1rlh;
     display: inline-flex;
     align-items: center;
@@ -371,12 +354,7 @@
 
   button {
     appearance: none;
-    font-family:
-      "Forma DJR",
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      sans-serif;
+    font-family: var(--font-sans);
     text-box: trim-both cap alphabetic;
     text-transform: uppercase;
     text-align: center;
