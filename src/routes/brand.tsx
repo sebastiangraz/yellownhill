@@ -86,7 +86,7 @@ const INITIAL_CONFIG: Config = {
   staggerInvert: true,
   stagger: 400,
   duration: 1000,
-  animationRange: 1,
+  animationRange: 0.3,
 };
 
 type SliderDef = {
