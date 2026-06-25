@@ -56,16 +56,16 @@ function RouteComponent() {
           falloffPower={0.4}
           tileGap={0.5}
           seed={11}
-          animate={true}
-          stagger={3000}
-          duration={6000}
           staggerInvert={true}
-          animationRange={0.4}
-          animationFade={false}
           rotationAmount={360}
           distortionMode="scatter"
           srcBackdrop={true}
           borderColor="hsla(0, 0%, 0%, 0.2)"
+          // animate={true}
+          // stagger={3000}
+          // duration={6000}
+          // animationRange={0.4}
+          // animationFade={false}
         />
       </div>
       <section className="bleed ">

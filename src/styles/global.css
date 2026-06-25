@@ -147,9 +147,9 @@
   }
 
   nav svg {
-    width: 180px;
     height: auto;
     overflow: visible;
+    width: min(12rlh, 180px);
   }
 
   .container {
