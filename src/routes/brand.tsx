@@ -197,14 +197,13 @@ function RouteComponent() {
         <div className={`startend ${styles.section} fade-parallax`}>
           <div className={styles.sectionHead}>
             <h1>Brand</h1>
-
             <p className="secondary">
               The core building blocks of Yellown Hill.
             </p>
+            <button onClick={() => window.open(ASSETS_ZIP, "_blank")}>
+              Logotypes<span className="secondary">.zip</span>
+            </button>
           </div>
-          <a className="badge" href={ASSETS_ZIP} download>
-            Logotypes.zip
-          </a>
         </div>
       </section>
 
