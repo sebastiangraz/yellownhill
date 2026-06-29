@@ -63,7 +63,6 @@ function RouteComponent() {
           distortionMode="scatter"
           srcBackdrop={true}
           borderColor="hsla(0, 0%, 0%, 0.2)"
-          highRes={true}
           // animate={true}
           // stagger={3000}
           // duration={6000}
