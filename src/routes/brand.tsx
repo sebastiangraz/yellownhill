@@ -15,6 +15,7 @@ import building from "/building.jpg";
 import birdclouds from "/birdref2.png";
 import buildingAlt from "/building-alt.jpg";
 import cloud from "/cloud.jpg";
+import mtn from "/mtn1.png";
 
 export const Route = createFileRoute("/brand")({
   component: RouteComponent,
@@ -157,6 +158,7 @@ const PRESETS: { label: string; src: string }[] = [
   { label: "Clouds", src: cloud },
   { label: "Birds", src: bird },
   { label: "Sky", src: sky },
+  { label: "Mountain", src: mtn },
 ];
 
 function RouteComponent() {

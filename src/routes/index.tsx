@@ -4,6 +4,7 @@ import TileDistort from "~/components/TileDistort";
 import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
 import birdref2 from "/birdref2.png";
+import mtn from "/mtn2.png";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -46,21 +47,22 @@ function RouteComponent() {
           </h1>{" "}
         </div>
         <TileDistort
-          src={birdref2}
+          src={mtn}
           className={styles.tile}
-          gridCols={18}
-          distortionAmount={50}
+          gridCols={7}
+          distortionAmount={20}
           originX={0}
           originY={0}
           falloffCurve="ease-out"
           falloffPower={0.4}
           tileGap={0.5}
-          seed={11}
+          seed={28}
           staggerInvert={true}
-          rotationAmount={360}
+          invertFalloff={true}
+          rotationAmount={0}
           distortionMode="scatter"
           srcBackdrop={true}
-          borderColor="hsla(0, 0%, 0%, 0.2)"
+          borderColor="hsla(0, 0%, 0%, 0.4)"
           // animate={true}
           // stagger={3000}
           // duration={6000}
@@ -82,9 +84,9 @@ function RouteComponent() {
               </h2>
               <p>
                 The platform works with investors, corporations, financial
-                institutions, family offices, entrepreneurs, and business owners,
-                supporting long-term relationships and strategic initiatives
-                across global markets.
+                institutions, family offices, entrepreneurs, and business
+                owners, supporting long-term relationships and strategic
+                initiatives across global markets.
               </p>
             </div>
           </div>
@@ -97,8 +99,8 @@ function RouteComponent() {
               <p>
                 Ray Gelbberg is based in New York, working across strategic
                 relationships involving investors, corporations, financial
-                institutions, and family offices throughout North America and the
-                Asia-Pacific region.
+                institutions, and family offices throughout North America and
+                the Asia-Pacific region.
               </p>
               <p>
                 His work is focused on long-term institutional relationships,
