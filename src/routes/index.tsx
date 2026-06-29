@@ -4,7 +4,7 @@ import TileDistort from "~/components/TileDistort";
 import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
 import birdref2 from "/birdref2.png";
-import mtn from "/mtn2.png";
+import mtn from "/mtn3.png";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -50,19 +50,20 @@ function RouteComponent() {
           src={mtn}
           className={styles.tile}
           gridCols={7}
-          distortionAmount={20}
-          originX={0}
-          originY={0}
+          distortionAmount={32}
+          originX={0.5}
+          originY={1}
           falloffCurve="ease-out"
-          falloffPower={0.4}
+          falloffPower={0.8}
           tileGap={0.5}
-          seed={28}
+          seed={9}
           staggerInvert={true}
-          invertFalloff={true}
-          rotationAmount={0}
+          invertFalloff={false}
+          rotationAmount={10}
           distortionMode="scatter"
           srcBackdrop={true}
-          borderColor="hsla(0, 0%, 0%, 0.4)"
+          borderColor="hsla(0, 0%, 0%, 0.2)"
+          highRes={true}
           // animate={true}
           // stagger={3000}
           // duration={6000}

@@ -63,6 +63,9 @@ const DEFAULTS = {
    *  tileGap > 0, this becomes the color of the gaps ("grout"). Accepts any CSS
    *  color: hex, rgb(a), hsl(a), named colors, or var(--token). Empty = off. */
   borderColor: "",
+  /** Render the canvas backing store at 2× the device pixel ratio so the source
+   *  image is sampled at higher detail (crisper tiles). Costs more pixels/memory. */
+  highRes: false,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -173,6 +176,9 @@ export type TileDistortProps = {
   /** Color of the tile gaps, painted behind the tiles (on top of srcBackdrop).
    *  Accepts hex, rgb(a), hsl(a), named colors, or var(--token). */
   borderColor?: string;
+  /** Render the canvas at 2× the device pixel ratio for higher-DPI (crisper)
+   *  source sampling. */
+  highRes?: boolean;
 };
 
 export function TileDistort({
@@ -197,6 +203,7 @@ export function TileDistort({
   animationRange = DEFAULTS.animationRange,
   srcBackdrop = DEFAULTS.srcBackdrop,
   borderColor = DEFAULTS.borderColor,
+  highRes = DEFAULTS.highRes,
 }: TileDistortProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const wrapRef = React.useRef<HTMLDivElement>(null);
@@ -235,7 +242,7 @@ export function TileDistort({
     // elapsed === null  → fully settled (final) frame
     // elapsed is ms      → animated frame at that time since start
     const draw = (elapsed: number | null) => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = (window.devicePixelRatio || 1) * (highRes ? 2 : 1);
       const w = wrap.clientWidth;
       const h = wrap.clientHeight;
       if (w === 0 || h === 0) return;
@@ -453,6 +460,7 @@ export function TileDistort({
     animationRange,
     srcBackdrop,
     borderColor,
+    highRes,
   ]);
 
   return (

@@ -15,7 +15,7 @@ import building from "/building.jpg";
 import birdclouds from "/birdref2.png";
 import buildingAlt from "/building-alt.jpg";
 import cloud from "/cloud.jpg";
-import mtn from "/mtn1.png";
+import mtn from "/mtn2.png";
 
 export const Route = createFileRoute("/brand")({
   component: RouteComponent,
