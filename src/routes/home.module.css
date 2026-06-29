@@ -114,6 +114,7 @@
     padding-bottom: 1rlh;
   }
   .whoWeAreContent {
+    box-shadow: none;
     border-inline: none;
     padding-inline: 0;
   }
