@@ -65,7 +65,7 @@ const DEFAULTS = {
   borderColor: "",
   /** Render the canvas backing store at 2× the device pixel ratio so the source
    *  image is sampled at higher detail (crisper tiles). Costs more pixels/memory. */
-  highRes: false,
+  highRes: true,
 };
 
 /* -------------------------------------------------------------------------- */
