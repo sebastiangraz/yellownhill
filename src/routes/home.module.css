@@ -112,15 +112,17 @@
   }
   .whoWeAreRow {
     align-items: stretch;
+    row-gap: 3rlh;
+  }
+  .whoWeAreRow + .whoWeAreRow {
+    padding-top: 3rlh;
   }
   .whoWeAreRow + .whoWeAreRow > * {
-    padding-top: 3rlh;
-    padding-bottom: 0;
+    padding-top: 0;
   }
   .whoWeAreLabel {
     text-align: left;
     padding-right: 0;
-    padding-bottom: 3rlh;
   }
   .whoWeAreContent {
     box-shadow: none;
