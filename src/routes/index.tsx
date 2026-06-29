@@ -5,7 +5,7 @@ import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
 import birdref2 from "/birdref2.png";
 import mtn from "/mtn3.png";
-
+import mtn4 from "/mtn4.png";
 export const Route = createFileRoute("/")({
   component: RouteComponent,
 });
