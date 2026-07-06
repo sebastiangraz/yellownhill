@@ -18,6 +18,13 @@ import cloud from "/cloud.jpg";
 import mtn from "/mtn2.png";
 
 export const Route = createFileRoute("/brand")({
+  head: () => ({
+    links: [{ rel: "canonical", href: "https://yellownhill.com/brand" }],
+    meta: [
+      { title: "Brand — Yellown Hill" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: RouteComponent,
 });
 

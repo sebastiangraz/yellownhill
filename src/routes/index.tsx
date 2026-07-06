@@ -6,7 +6,54 @@ import styles from "./home.module.css";
 import birdref2 from "/birdref2.png";
 import mtn from "/mtn3.png";
 import mtn4 from "/mtn4.png";
+const SITE_URL = "https://yellownhill.com";
+
+const ORGANIZATION_JSONLD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Yellown Hill",
+  alternateName: "Yellown Hill™",
+  url: SITE_URL,
+  description:
+    "New York-based strategic capital platform focused on infrastructure, energy, real assets, and cross-border capital relationships.",
+  founder: {
+    "@type": "Person",
+    name: "Ray Gelbberg",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "New York",
+    addressRegion: "NY",
+    postalCode: "10022",
+    addressCountry: "US",
+  },
+  knowsAbout: [
+    "Infrastructure",
+    "Energy",
+    "Real assets",
+    "Cross-border capital relationships",
+  ],
+});
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    links: [{ rel: "canonical", href: `${SITE_URL}/` }],
+    meta: [
+      { title: "Yellown Hill — Strategic Capital Platform" },
+      {
+        name: "description",
+        content:
+          "Yellown Hill is a New York-based strategic capital platform focused on infrastructure, energy, real assets, and cross-border capital relationships.",
+      },
+      { property: "og:url", content: `${SITE_URL}/` },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: ORGANIZATION_JSONLD,
+      },
+    ],
+  }),
   component: RouteComponent,
 });
 

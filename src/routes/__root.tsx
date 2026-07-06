@@ -13,12 +13,37 @@ import {
 import globalCss from "~/styles/global.css?url";
 import { Logo } from "~/components/Logo/Logo";
 
+const SITE_URL = "https://yellownhill.com";
+const SITE_NAME = "Yellown Hill";
+const DEFAULT_TITLE = "Yellown Hill — Strategic Capital Platform";
+const DEFAULT_DESCRIPTION =
+  "Yellown Hill is a New York-based strategic capital platform focused on infrastructure, energy, real assets, and cross-border capital relationships.";
+const OG_IMAGE = `${SITE_URL}/og.png`;
+
 export const Route = createRootRoute({
   head: () => ({
-    links: [{ rel: "stylesheet", href: globalCss }],
+    links: [
+      { rel: "stylesheet", href: globalCss },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "apple-touch-icon", href: "/favicon.ico" },
+    ],
     meta: [
-      { name: "description", content: "Yellown Hill" },
       { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+      { title: DEFAULT_TITLE },
+      { name: "description", content: DEFAULT_DESCRIPTION },
+      { name: "theme-color", content: "#dfdfdc" },
+      // Open Graph defaults (routes override title/description/url)
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:title", content: DEFAULT_TITLE },
+      { property: "og:description", content: DEFAULT_DESCRIPTION },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:image", content: OG_IMAGE },
+      // Twitter Card defaults
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: DEFAULT_TITLE },
+      { name: "twitter:description", content: DEFAULT_DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
   }),
   component: RootComponent,
@@ -38,12 +63,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   });
 
   return (
-    <html>
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <div className="container navigation">
+        <header className="container navigation">
           <nav>
             {isHome ? (
               <Logo />
@@ -54,7 +79,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             )}
             <span className="badge">New York, NY 10022</span>
           </nav>
-        </div>
+        </header>
 
         <main className="container">{children}</main>
         <footer className="container"></footer>
