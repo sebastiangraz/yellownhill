@@ -1,6 +1,5 @@
 /// <reference types="vite/client" />
 import * as React from "react";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import {
   HeadContent,
   Link,
@@ -15,7 +14,7 @@ import { Logo } from "~/components/Logo/Logo";
 
 const SITE_URL = "https://yellownhill.com";
 const SITE_NAME = "Yellown Hill";
-const DEFAULT_TITLE = "Yellown Hill — Strategic Capital Platform";
+const DEFAULT_TITLE = "Yellown Hill · Strategic Capital Platform";
 const DEFAULT_DESCRIPTION =
   "Yellown Hill is a New York-based strategic capital platform focused on infrastructure, energy, real assets, and cross-border capital relationships.";
 const OG_IMAGE = `${SITE_URL}/og.png`;
@@ -75,7 +74,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {isHome ? (
               <Logo />
             ) : (
-              <Link to="/" aria-label="Yellown Hill — home">
+              <Link to="/" aria-label="Yellown Hill · home">
                 <Logo />
               </Link>
             )}
@@ -85,7 +84,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
         <main className="container">{children}</main>
         <footer className="container"></footer>
-        {/* <TanStackRouterDevtools position="bottom-right" /> */}
         <Scripts />
       </body>
     </html>

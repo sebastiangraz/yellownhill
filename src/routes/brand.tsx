@@ -9,19 +9,18 @@ import { Logo } from "~/components/Logo/Logo";
 import styles from "./brand.module.css";
 import bird from "/bird.png";
 import sky from "/sky.png";
-import pastelscrapers from "/pastelscrapers.jpg";
 import skyscraper from "/skyscraper.jpg";
 import building from "/building.jpg";
 import birdclouds from "/birdref2.png";
 import buildingAlt from "/building-alt.jpg";
 import cloud from "/cloud.jpg";
-import mtn from "/mtn2.png";
+import mtn from "/mtn4.png";
 
 export const Route = createFileRoute("/brand")({
   head: () => ({
     links: [{ rel: "canonical", href: "https://yellownhill.com/brand" }],
     meta: [
-      { title: "Brand — Yellown Hill" },
+      { title: "Brand · Yellown Hill" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -157,7 +156,6 @@ function toRgba(hex: string, alpha: number): string {
 
 /** Bundled sample images offered as one-click presets in the generator. */
 const PRESETS: { label: string; src: string }[] = [
-  { label: "Towers", src: pastelscrapers },
   { label: "Skyscraper", src: skyscraper },
   { label: "Birdclouds", src: birdclouds },
   { label: "Brick", src: building },

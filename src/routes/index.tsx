@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import TileDistort from "~/components/TileDistort";
-import { Logo } from "~/components/Logo/Logo";
 import styles from "./home.module.css";
-import birdref2 from "/birdref2.png";
 import mtn from "/mtn3.png";
-import mtn4 from "/mtn4.png";
 const SITE_URL = "https://yellownhill.com";
 
 const ORGANIZATION_JSONLD = JSON.stringify({
@@ -39,7 +36,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     links: [{ rel: "canonical", href: `${SITE_URL}/` }],
     meta: [
-      { title: "Yellown Hill — Strategic Capital Platform" },
+      { title: "Yellown Hill · Strategic Capital Platform" },
       {
         name: "description",
         content:
