@@ -106,12 +106,8 @@ function RouteComponent() {
           rotationAmount={10}
           distortionMode="scatter"
           srcBackdrop={true}
+          backdropBlur={16}
           borderColor="hsla(0, 0%, 0%, 0.2)"
-          // animate={true}
-          // stagger={3000}
-          // duration={6000}
-          // animationRange={0.4}
-          // animationFade={false}
         />
       </div>
       <section className="bleed ">

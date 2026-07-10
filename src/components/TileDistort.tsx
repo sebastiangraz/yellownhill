@@ -263,9 +263,17 @@ export function TileDistort({
       ctx.clearRect(0, 0, w, h);
 
       const cols = Math.max(1, Math.round(gridCols));
-      const tileW = w / cols;
-      const rows = Math.max(1, Math.round(h / tileW));
-      const tileH = h / rows;
+      // Nominal square cell used only to derive the row count from the aspect ratio.
+      const cellW = w / cols;
+      const rows = Math.max(1, Math.round(h / cellW));
+      // Uniform tile size with gaps living *between* tiles: cols tiles plus
+      // (cols-1) interior gaps span the full width, so every tile is identical
+      // and the grid hugs all four edges (no trailing gap right/bottom). pitch
+      // is the per-tile stride (tile size + one gap).
+      const drawW = (w - (cols - 1) * tileGap) / cols;
+      const drawH = (h - (rows - 1) * tileGap) / rows;
+      const pitchX = drawW + tileGap;
+      const pitchY = drawH + tileGap;
 
       // "cover" mapping: figure out the region of the source image that fills
       // the canvas without distortion, then slice that region into the grid.
@@ -395,10 +403,10 @@ export function TileDistort({
           // The tile (the "mask") stays put on the fixed grid. Distortion moves
           // the image *underneath* it, so we offset the SOURCE sample region,
           // not the destination rect.
-          const destX = c * tileW;
-          const destY = r * tileH;
-          const destW = tileW - tileGap;
-          const destH = tileH - tileGap;
+          const destX = c * pitchX;
+          const destY = r * pitchY;
+          const destW = drawW;
+          const destH = drawH;
 
           // Overscan so a rotated tile still fully covers its (square) window
           // instead of leaving transparent corner triangles.

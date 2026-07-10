@@ -89,7 +89,7 @@ const INITIAL_CONFIG: Config = {
   rotationAmount: 0,
   seed: 11,
   srcBackdrop: true,
-  backdropBlur: 0,
+  backdropBlur: 12,
   animate: true,
   animationFade: false,
   staggerInvert: true,
