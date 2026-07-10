@@ -67,6 +67,7 @@ type Config = {
   rotationAmount: number;
   seed: number;
   srcBackdrop: boolean;
+  backdropBlur: number;
   animate: boolean;
   animationFade: boolean;
   staggerInvert: boolean;
@@ -88,6 +89,7 @@ const INITIAL_CONFIG: Config = {
   rotationAmount: 0,
   seed: 11,
   srcBackdrop: true,
+  backdropBlur: 0,
   animate: true,
   animationFade: false,
   staggerInvert: true,
@@ -108,6 +110,7 @@ const SLIDERS: SliderDef[] = [
   { key: "gridCols", label: "Grid columns", min: 2, max: 48, step: 1 },
   { key: "tileGap", label: "Tile gap", min: 0, max: 8, step: 0.5 },
   { key: "distortionAmount", label: "Distortion", min: 0, max: 200, step: 1 },
+  { key: "backdropBlur", label: "Backdrop blur", min: 0, max: 40, step: 0.5 },
   { key: "originX", label: "Origin X", min: 0, max: 1, step: 0.01 },
   { key: "originY", label: "Origin Y", min: 0, max: 1, step: 0.01 },
   { key: "falloffPower", label: "Falloff power", min: 0.1, max: 6, step: 0.1 },

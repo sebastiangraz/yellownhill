@@ -59,6 +59,10 @@ const DEFAULTS = {
   /** Draw the original (undistorted) image behind the tiles on the canvas, so
    *  the inter-tile gaps reveal the source image instead of transparency. */
   srcBackdrop: false,
+  /** Gaussian blur radius (in CSS pixels) applied to the srcBackdrop only. 0 =
+   *  off. The backdrop is over-drawn past the canvas edges so the blur samples
+   *  real image content edge-to-edge — no black/transparent fringe or vignette. */
+  backdropBlur: 0,
   /** Fill color painted behind the tiles (on top of srcBackdrop). When set and
    *  tileGap > 0, this becomes the color of the gaps ("grout"). Accepts any CSS
    *  color: hex, rgb(a), hsl(a), named colors, or var(--token). Empty = off. */
@@ -173,6 +177,8 @@ export type TileDistortProps = {
   animationRange?: number;
   /** Draw the original image behind the tiles to hide the inter-tile gaps. */
   srcBackdrop?: boolean;
+  /** Gaussian blur radius (in CSS pixels) for the srcBackdrop. 0 = off. */
+  backdropBlur?: number;
   /** Color of the tile gaps, painted behind the tiles (on top of srcBackdrop).
    *  Accepts hex, rgb(a), hsl(a), named colors, or var(--token). */
   borderColor?: string;
@@ -202,6 +208,7 @@ export function TileDistort({
   staggerInvert = DEFAULTS.staggerInvert,
   animationRange = DEFAULTS.animationRange,
   srcBackdrop = DEFAULTS.srcBackdrop,
+  backdropBlur = DEFAULTS.backdropBlur,
   borderColor = DEFAULTS.borderColor,
   highRes = DEFAULTS.highRes,
 }: TileDistortProps) {
@@ -274,7 +281,31 @@ export function TileDistort({
       // (and their gaps) sit on top of it. The gaps reveal the source image
       // instead of transparency.
       if (srcBackdrop) {
-        ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
+        if (backdropBlur > 0) {
+          // Low-res base layer. A CSS-style blur() samples transparent pixels
+          // past the canvas edges, so the blurred image alone fades to a dark
+          // halo at the borders. To fix that without scaling the image, first
+          // paint a tiny (~8%) copy scaled back up to fill the frame: upscaling
+          // it is inherently smooth, it reaches every edge, and it carries the
+          // correct colors — so the blurred layer's faded fringe reveals matching
+          // color underneath instead of a vignette.
+          const lw = Math.max(1, Math.round(w * 0.08));
+          const lh = Math.max(1, Math.round(h * 0.08));
+          const low = document.createElement("canvas");
+          low.width = lw;
+          low.height = lh;
+          const lctx = low.getContext("2d");
+          if (lctx) {
+            lctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, lw, lh);
+            ctx.drawImage(low, 0, 0, lw, lh, 0, 0, w, h);
+          }
+          // Sharp, in-place blur on top (no scaling).
+          ctx.filter = `blur(${backdropBlur}px)`;
+          ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
+          ctx.filter = "none";
+        } else {
+          ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
+        }
       }
 
       // Gap color: painted on top of the srcBackdrop, behind the tiles. With
@@ -459,6 +490,7 @@ export function TileDistort({
     staggerInvert,
     animationRange,
     srcBackdrop,
+    backdropBlur,
     borderColor,
     highRes,
   ]);
