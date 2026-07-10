@@ -4,6 +4,7 @@ import {
   TileDistort,
   type FalloffCurve,
   type DistortionMode,
+  type GroutBlending,
 } from "~/components/TileDistort";
 import { Logo } from "~/components/Logo/Logo";
 import styles from "./brand.module.css";
@@ -68,6 +69,7 @@ type Config = {
   seed: number;
   srcBackdrop: boolean;
   backdropBlur: number;
+  groutBlending: GroutBlending;
   animate: boolean;
   animationFade: boolean;
   staggerInvert: boolean;
@@ -90,6 +92,7 @@ const INITIAL_CONFIG: Config = {
   seed: 11,
   srcBackdrop: true,
   backdropBlur: 12,
+  groutBlending: "normal",
   animate: true,
   animationFade: false,
   staggerInvert: true,
@@ -145,6 +148,14 @@ const DISTORTION_MODES: DistortionMode[] = [
   "radial",
   "vertical",
   "horizontal",
+];
+
+const GROUT_BLENDINGS: GroutBlending[] = [
+  "normal",
+  "plus-lighter",
+  "plus-light",
+  "plus-darker",
+  "plus-dark",
 ];
 
 /** Compose a "#rrggbb" hex + 0..1 alpha into an rgba() string the canvas can
@@ -416,6 +427,21 @@ function RouteComponent() {
                     }
                   >
                     {DISTORTION_MODES.map((o) => (
+                      <option key={o} value={o}>
+                        {o}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className={styles.control}>
+                  <span className="badge">Grout blending</span>
+                  <select
+                    value={config.groutBlending}
+                    onChange={(e) =>
+                      set("groutBlending", e.target.value as GroutBlending)
+                    }
+                  >
+                    {GROUT_BLENDINGS.map((o) => (
                       <option key={o} value={o}>
                         {o}
                       </option>

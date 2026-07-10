@@ -15,6 +15,17 @@ export type FalloffCurve =
 
 export type DistortionMode = "scatter" | "radial" | "vertical" | "horizontal";
 
+/** Blend mode for the grout fill against the srcBackdrop beneath it. There are
+ *  two modes — additive (plus-lighter) and subtractive (plus-darker) — each with
+ *  a full-strength and a half-strength ("light" / "dark") variant. "normal" is
+ *  no blending (plain source-over). */
+export type GroutBlending =
+  | "normal"
+  | "plus-lighter"
+  | "plus-light"
+  | "plus-darker"
+  | "plus-dark";
+
 const DEFAULTS = {
   /** Number of tile columns. Rows are derived from the aspect ratio so tiles
    *  stay roughly square. */
@@ -67,6 +78,10 @@ const DEFAULTS = {
    *  tileGap > 0, this becomes the color of the gaps ("grout"). Accepts any CSS
    *  color: hex, rgb(a), hsl(a), named colors, or var(--token). Empty = off. */
   groutColor: "",
+  /** Blend mode for the grout fill over the srcBackdrop. "normal" = no blend;
+   *  plus-lighter/plus-light add light (full / half strength); plus-darker/
+   *  plus-dark subtract it. The "light"/"dark" variants are 50% less intense. */
+  groutBlending: "normal" as GroutBlending,
   /** Render the canvas backing store at 2× the device pixel ratio so the source
    *  image is sampled at higher detail (crisper tiles). Costs more pixels/memory. */
   highRes: true,
@@ -182,6 +197,9 @@ export type TileDistortProps = {
   /** Color of the tile gaps, painted behind the tiles (on top of srcBackdrop).
    *  Accepts hex, rgb(a), hsl(a), named colors, or var(--token). */
   groutColor?: string;
+  /** Blend mode for the grout fill over the srcBackdrop (additive / subtractive,
+   *  each with a full and a half-strength variant). */
+  groutBlending?: GroutBlending;
   /** Render the canvas at 2× the device pixel ratio for higher-DPI (crisper)
    *  source sampling. */
   highRes?: boolean;
@@ -210,6 +228,7 @@ export function TileDistort({
   srcBackdrop = DEFAULTS.srcBackdrop,
   backdropBlur = DEFAULTS.backdropBlur,
   groutColor = DEFAULTS.groutColor,
+  groutBlending = DEFAULTS.groutBlending,
   highRes = DEFAULTS.highRes,
 }: TileDistortProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -245,6 +264,30 @@ export function TileDistort({
     // Resolve once per effect run so var(--token) is read in the wrap's cascade
     // and we don't touch the DOM every animation frame.
     const fillColor = groutColor ? resolveColor(groutColor, wrap) : "";
+
+    // Resolve the grout blend to a canvas composite op + an alpha multiplier
+    // (the "light"/"dark" variants are half-strength). "lighter" IS canvas'
+    // additive plus-lighter. For darkening we prefer the real "plus-darker"
+    // operator but fall back to "multiply" where it's unsupported (Chrome's
+    // canvas doesn't implement plus-darker) — detected once by round-tripping
+    // the value through the context.
+    const supportsPlusDarker = (() => {
+      const prev = ctx.globalCompositeOperation;
+      ctx.globalCompositeOperation = "plus-darker" as GlobalCompositeOperation;
+      const ok = (ctx.globalCompositeOperation as string) === "plus-darker";
+      ctx.globalCompositeOperation = prev;
+      return ok;
+    })();
+    const darkerOp: GlobalCompositeOperation = supportsPlusDarker
+      ? ("plus-darker" as GlobalCompositeOperation)
+      : "multiply";
+    const groutBlend: { op: GlobalCompositeOperation; alpha: number } = {
+      "plus-lighter": { op: "lighter" as GlobalCompositeOperation, alpha: 1 },
+      "plus-light": { op: "lighter" as GlobalCompositeOperation, alpha: 0.5 },
+      "plus-darker": { op: darkerOp, alpha: 1 },
+      "plus-dark": { op: darkerOp, alpha: 0.5 },
+      normal: { op: "source-over" as GlobalCompositeOperation, alpha: 1 },
+    }[groutBlending];
 
     // elapsed === null  → fully settled (final) frame
     // elapsed is ms      → animated frame at that time since start
@@ -327,10 +370,16 @@ export function TileDistort({
       }
 
       // Gap color: painted on top of the srcBackdrop, behind the tiles. With
-      // tileGap > 0 the uncovered gaps show this color ("grout").
+      // tileGap > 0 the uncovered gaps show this color ("grout"). groutBlending
+      // controls how it composites against the backdrop (save/restore so the
+      // op + alpha don't leak into the tile draw below).
       if (fillColor) {
+        ctx.save();
+        ctx.globalCompositeOperation = groutBlend.op;
+        ctx.globalAlpha = groutBlend.alpha;
         ctx.fillStyle = fillColor;
         ctx.fillRect(0, 0, w, h);
+        ctx.restore();
       }
 
       const maxDist = Math.hypot(
@@ -510,6 +559,7 @@ export function TileDistort({
     srcBackdrop,
     backdropBlur,
     groutColor,
+    groutBlending,
     highRes,
   ]);
 
