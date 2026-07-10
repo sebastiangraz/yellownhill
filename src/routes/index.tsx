@@ -275,7 +275,7 @@ function RouteComponent() {
                 rows={4}
                 required
               />
-              {!statusSuccess && !statusError && (
+              {!statusSuccess && (
                 <button type="submit" disabled={statusSubmitting}>
                   {statusSubmitting ? "Sending…" : "Send"}
                 </button>
@@ -286,7 +286,7 @@ function RouteComponent() {
                 </p>
               )}
               {statusError && (
-                <p role="alert" className="center py-1">
+                <p role="alert" className=" py-1">
                   Something went wrong. Please email{" "}
                   <a href="mailto:ray@yellownhill.com">ray@yellownhill.com</a>{" "}
                   directly.
