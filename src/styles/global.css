@@ -113,7 +113,7 @@
   }
 
   .small {
-    font-size: max(0.8125rlh, 11px);
+    font-size: max(0.8125rlh, 12px);
     line-height: 1.5;
   }
 
@@ -198,7 +198,7 @@
       --_columns: 2;
     }
   }
-  @container (max-width: 24rem) {
+  @container (max-width: 20rem) {
     .columns[style*="--columns"] {
       --_columns: 1;
     }
