@@ -232,62 +232,62 @@ function RouteComponent() {
 
       {/* Contact */}
       <section className="fade-parallax">
-        <div className="startend gap-y-2 center px-4 grid ">
-          <span className="badge">Request a Conversation</span>
-          <p className="max-width-prose">
-            Ray Gelbberg · Founder, New York, NY 10022
-          </p>
-          <form
-            name="contact"
-            method="POST"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
-            className={`${styles.contactForm} max-width-prose`}
-            onSubmit={handleSubmit}
-          >
-            <input type="hidden" name="form-name" value="contact" />
-            <p hidden>
-              <label>
-                Don’t fill this out: <input name="bot-field" />
-              </label>
-            </p>
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              aria-label="Name"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              aria-label="Email"
-              required
-            />
-            <textarea
-              name="message"
-              placeholder="Message"
-              aria-label="Message"
-              rows={4}
-              required
-            />
-            <button type="submit" disabled={status === "submitting"}>
-              {status === "submitting" ? "Sending…" : "Send"}
-            </button>
-            {status === "success" && (
-              <p role="status" className="small">
-                Thank you — your message has been sent.
+        <div className="startend px-4 grid">
+          <div className="gap-y-2 grid">
+            <span className="badge center">Request a Conversation</span>
+            <p className="center">Ray Gelbberg · Founder, New York, NY 10022</p>
+            <form
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              netlify-honeypot="bot-field"
+              className={`${styles.contactForm} max-width-prose`}
+              onSubmit={handleSubmit}
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              <p hidden>
+                <label>
+                  Don’t fill this out: <input name="bot-field" />
+                </label>
               </p>
-            )}
-            {status === "error" && (
-              <p role="alert" className="small">
-                Something went wrong. Please email{" "}
-                <a href="mailto:ray@yellownhill.com">ray@yellownhill.com</a>{" "}
-                directly.
-              </p>
-            )}
-          </form>
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                aria-label="Name"
+                required
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                aria-label="Email"
+                required
+              />
+              <textarea
+                name="message"
+                placeholder="Message"
+                aria-label="Message"
+                rows={4}
+                required
+              />
+              <button type="submit" disabled={status === "submitting"}>
+                {status === "submitting" ? "Sending…" : "Send"}
+              </button>
+              {status === "success" && (
+                <p role="status" className="small">
+                  Thank you — your message has been sent.
+                </p>
+              )}
+              {status === "error" && (
+                <p role="alert" className="small">
+                  Something went wrong. Please email{" "}
+                  <a href="mailto:ray@yellownhill.com">ray@yellownhill.com</a>{" "}
+                  directly.
+                </p>
+              )}
+            </form>
+          </div>
         </div>
       </section>
 

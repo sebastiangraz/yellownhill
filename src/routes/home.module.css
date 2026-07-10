@@ -69,6 +69,7 @@
   row-gap: 1rlh;
   width: 100%;
   text-align: left;
+  justify-self: center;
 
   & button {
     justify-self: start;

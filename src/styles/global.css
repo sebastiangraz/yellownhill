@@ -355,6 +355,9 @@
   }
   textarea {
     padding-block: 1rlh;
+    field-sizing: content;
+    min-height: 8rlh;
+    line-height: 1.5;
   }
   section {
     grid-column: bleedstart / bleedend;
