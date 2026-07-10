@@ -91,6 +91,93 @@ const DEFAULTS = {
 
 const DEG = Math.PI / 180;
 
+/** Whether the 2D context implements the `filter` attribute. Safari ships it
+ *  disabled by default (WebKit bug 198416), so `ctx.filter = "blur(…)"` is
+ *  silently ignored there and the backdrop would render sharp. When the
+ *  attribute is missing we blur the backdrop ourselves (see gaussianBlur). */
+const CANVAS_FILTER_SUPPORTED =
+  typeof CanvasRenderingContext2D !== "undefined" &&
+  "filter" in CanvasRenderingContext2D.prototype;
+
+/** The n box widths whose successive box blurs approximate a Gaussian of the
+ *  given standard deviation — the same three-box construction the SVG filter
+ *  spec defines, so the result matches a native blur() closely. */
+function boxesForGauss(sigma: number, n: number): number[] {
+  const ideal = Math.sqrt((12 * sigma * sigma) / n + 1);
+  let lo = Math.floor(ideal);
+  if (lo % 2 === 0) lo--;
+  const hi = lo + 2;
+  const m = Math.round(
+    (12 * sigma * sigma - n * lo * lo - 4 * n * lo - 3 * n) / (-4 * lo - 4),
+  );
+  return Array.from({ length: n }, (_, i) => (i < m ? lo : hi));
+}
+
+/** One separable box-blur pass (radius r, sliding window) from src into dst.
+ *  Edges clamp to the border pixel, so a fully opaque source stays opaque —
+ *  no dark/transparent fringe at the canvas borders. */
+function boxBlurPass(
+  src: Uint8ClampedArray,
+  dst: Uint8ClampedArray,
+  w: number,
+  h: number,
+  r: number,
+  horizontal: boolean,
+) {
+  const lines = horizontal ? h : w;
+  const len = horizontal ? w : h;
+  const lineStride = horizontal ? w * 4 : 4;
+  const pxStride = horizontal ? 4 : w * 4;
+  const div = 2 * r + 1;
+  for (let l = 0; l < lines; l++) {
+    const base = l * lineStride;
+    let s0 = 0,
+      s1 = 0,
+      s2 = 0,
+      s3 = 0;
+    for (let i = -r; i <= r; i++) {
+      const p = base + Math.min(len - 1, Math.max(0, i)) * pxStride;
+      s0 += src[p];
+      s1 += src[p + 1];
+      s2 += src[p + 2];
+      s3 += src[p + 3];
+    }
+    for (let i = 0; i < len; i++) {
+      const p = base + i * pxStride;
+      dst[p] = s0 / div;
+      dst[p + 1] = s1 / div;
+      dst[p + 2] = s2 / div;
+      dst[p + 3] = s3 / div;
+      const add = base + Math.min(len - 1, i + r + 1) * pxStride;
+      const sub = base + Math.max(0, i - r) * pxStride;
+      s0 += src[add] - src[sub];
+      s1 += src[add + 1] - src[sub + 1];
+      s2 += src[add + 2] - src[sub + 2];
+      s3 += src[add + 3] - src[sub + 3];
+    }
+  }
+}
+
+/** In-place Gaussian blur (stddev sigma, in canvas pixels) on a 2D context,
+ *  built from three box-blur passes per axis. Fallback for browsers without
+ *  CanvasRenderingContext2D.filter (Safari). */
+function gaussianBlur(
+  cx: CanvasRenderingContext2D,
+  w: number,
+  h: number,
+  sigma: number,
+) {
+  const image = cx.getImageData(0, 0, w, h);
+  const a = image.data;
+  const b = new Uint8ClampedArray(a.length);
+  for (const box of boxesForGauss(sigma, 3)) {
+    const r = (box - 1) / 2;
+    boxBlurPass(a, b, w, h, r, true);
+    boxBlurPass(b, a, w, h, r, false);
+  }
+  cx.putImageData(image, 0, 0);
+}
+
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 
 /** Eased progress for the fade + slide. */
@@ -248,6 +335,15 @@ export function TileDistort({
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const wrapRef = React.useRef<HTMLDivElement>(null);
   const imgRef = React.useRef<HTMLImageElement | null>(null);
+  // Cached blurred backdrop for the no-ctx.filter (Safari) path, so the JS
+  // blur runs once per image/size/radius instead of on every animation frame.
+  const blurCacheRef = React.useRef<{
+    img: HTMLImageElement;
+    w: number;
+    h: number;
+    blur: number;
+    canvas: HTMLCanvasElement;
+  } | null>(null);
   const [ready, setReady] = React.useState(false);
 
   // Load the image whenever src changes.
@@ -341,7 +437,7 @@ export function TileDistort({
       // (and their gaps) sit on top of it. The gaps reveal the source image
       // instead of transparency.
       if (srcBackdrop) {
-        if (backdropBlur > 0) {
+        if (backdropBlur > 0 && CANVAS_FILTER_SUPPORTED) {
           // Low-res base layer. A CSS-style blur() samples transparent pixels
           // past the canvas edges, so the blurred image alone fades to a dark
           // halo at the borders. To fix that without scaling the image, first
@@ -373,6 +469,64 @@ export function TileDistort({
           ctx.filter = `blur(${backdropBlur}px)`;
           ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
           ctx.filter = "none";
+        } else if (backdropBlur > 0) {
+          // No ctx.filter (Safari): blur the backdrop ourselves. Draw the
+          // cover region into an offscreen canvas and run a real Gaussian
+          // approximation over its pixels (gaussianBlur above). The offscreen
+          // canvas is moderately downscaled first — a Gaussian removes all
+          // detail finer than its radius, so blurring at reduced resolution
+          // and smooth-upscaling is visually identical to blurring at full
+          // size, and keeps the per-pixel JS work cheap. Because the blur
+          // clamps at the edges of a fully opaque bitmap, there's no border
+          // fringe and no low-res underlay is needed here.
+          const cached = blurCacheRef.current;
+          let blurred =
+            cached &&
+            cached.img === img &&
+            cached.w === w &&
+            cached.h === h &&
+            cached.blur === backdropBlur
+              ? cached.canvas
+              : null;
+          if (!blurred) {
+            const ds = Math.min(4, Math.max(1, Math.floor(backdropBlur / 3)));
+            const low = document.createElement("canvas");
+            low.width = Math.max(1, Math.round(w / ds));
+            low.height = Math.max(1, Math.round(h / ds));
+            const lctx = low.getContext("2d");
+            if (lctx) {
+              lctx.drawImage(
+                img,
+                srcOffX,
+                srcOffY,
+                visibleW,
+                visibleH,
+                0,
+                0,
+                low.width,
+                low.height,
+              );
+              try {
+                gaussianBlur(lctx, low.width, low.height, backdropBlur / ds);
+                blurred = low;
+                blurCacheRef.current = {
+                  img,
+                  w,
+                  h,
+                  blur: backdropBlur,
+                  canvas: low,
+                };
+              } catch {
+                // getImageData can throw on a tainted canvas — fall through to
+                // the sharp backdrop rather than break the whole draw.
+              }
+            }
+          }
+          if (blurred) {
+            ctx.drawImage(blurred, 0, 0, w, h);
+          } else {
+            ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
+          }
         } else {
           ctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, w, h);
         }
