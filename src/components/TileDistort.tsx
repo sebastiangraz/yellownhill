@@ -121,6 +121,20 @@ function resolveColor(color: string, el: HTMLElement): string {
   return resolved;
 }
 
+/** Parses any canvas-accepted color string into [r, g, b, a] with r/g/b in
+ *  0..255 and a in 0..1, by painting one pixel and reading it back. */
+function parseRGBA(color: string): [number, number, number, number] {
+  const c = document.createElement("canvas");
+  c.width = 1;
+  c.height = 1;
+  const cx = c.getContext("2d");
+  if (!cx) return [0, 0, 0, 1];
+  cx.fillStyle = color;
+  cx.fillRect(0, 0, 1, 1);
+  const [r, g, b, a] = cx.getImageData(0, 0, 1, 1).data;
+  return [r, g, b, a / 255];
+}
+
 /** Maps normalized distance t (0..1) to an intensity multiplier (0..1). */
 function falloff(
   t: number,
@@ -265,29 +279,24 @@ export function TileDistort({
     // and we don't touch the DOM every animation frame.
     const fillColor = groutColor ? resolveColor(groutColor, wrap) : "";
 
-    // Resolve the grout blend to a canvas composite op + an alpha multiplier
-    // (the "light"/"dark" variants are half-strength). "lighter" IS canvas'
-    // additive plus-lighter. For darkening we prefer the real "plus-darker"
-    // operator but fall back to "multiply" where it's unsupported (Chrome's
-    // canvas doesn't implement plus-darker) — detected once by round-tripping
-    // the value through the context.
-    const supportsPlusDarker = (() => {
-      const prev = ctx.globalCompositeOperation;
-      ctx.globalCompositeOperation = "plus-darker" as GlobalCompositeOperation;
-      const ok = (ctx.globalCompositeOperation as string) === "plus-darker";
-      ctx.globalCompositeOperation = prev;
-      return ok;
-    })();
-    const darkerOp: GlobalCompositeOperation = supportsPlusDarker
-      ? ("plus-darker" as GlobalCompositeOperation)
-      : "multiply";
-    const groutBlend: { op: GlobalCompositeOperation; alpha: number } = {
-      "plus-lighter": { op: "lighter" as GlobalCompositeOperation, alpha: 1 },
-      "plus-light": { op: "lighter" as GlobalCompositeOperation, alpha: 0.5 },
-      "plus-darker": { op: darkerOp, alpha: 1 },
-      "plus-dark": { op: darkerOp, alpha: 0.5 },
-      normal: { op: "source-over" as GlobalCompositeOperation, alpha: 1 },
-    }[groutBlending];
+    // Resolve the grout blend into a mode + a strength (the "light"/"dark"
+    // variants are half-strength). "lighter" is canvas' additive plus-lighter.
+    // "darker" is plus-darker, emulated as a linear burn below so it renders
+    // identically everywhere — Chrome's canvas has no native plus-darker op.
+    const groutBlend: {
+      kind: "normal" | "lighter" | "darker";
+      strength: number;
+    } = {
+      "plus-lighter": { kind: "lighter", strength: 1 },
+      "plus-light": { kind: "lighter", strength: 0.5 },
+      "plus-darker": { kind: "darker", strength: 1 },
+      "plus-dark": { kind: "darker", strength: 0.5 },
+      normal: { kind: "normal", strength: 1 },
+    }[groutBlending] as { kind: "normal" | "lighter" | "darker"; strength: number };
+
+    // Grout channels are needed as numbers for the linear-burn math; parse the
+    // resolved color once via a 1×1 scratch canvas (handles hex/rgb/hsl/named).
+    const groutRGBA = fillColor ? parseRGBA(fillColor) : null;
 
     // elapsed === null  → fully settled (final) frame
     // elapsed is ms      → animated frame at that time since start
@@ -373,12 +382,36 @@ export function TileDistort({
       // tileGap > 0 the uncovered gaps show this color ("grout"). groutBlending
       // controls how it composites against the backdrop (save/restore so the
       // op + alpha don't leak into the tile draw below).
-      if (fillColor) {
+      if (fillColor && groutRGBA) {
         ctx.save();
-        ctx.globalCompositeOperation = groutBlend.op;
-        ctx.globalAlpha = groutBlend.alpha;
-        ctx.fillStyle = fillColor;
-        ctx.fillRect(0, 0, w, h);
+        if (groutBlend.kind === "darker") {
+          // plus-darker = linear burn: max(0, D - A·(1 - S)), i.e. subtract the
+          // grout's darkness (weighted by its alpha × strength) from the
+          // backdrop. Chrome's canvas lacks a native plus-darker op, so build it
+          // from ops it does have: invert the canvas ("difference" vs white),
+          // ADD the scaled inverse-grout ("lighter"), then invert back. The two
+          // inversions turn the additive op into the subtractive burn.
+          const A = groutRGBA[3] * groutBlend.strength; // 0..1
+          const inv = (ch: number) => Math.round(A * (255 - ch));
+          ctx.globalAlpha = 1;
+          ctx.globalCompositeOperation = "difference";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, w, h);
+          ctx.globalCompositeOperation = "lighter";
+          ctx.fillStyle = `rgb(${inv(groutRGBA[0])}, ${inv(groutRGBA[1])}, ${inv(groutRGBA[2])})`;
+          ctx.fillRect(0, 0, w, h);
+          ctx.globalCompositeOperation = "difference";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, w, h);
+        } else {
+          // normal → source-over; plus-lighter → additive "lighter". strength
+          // scales the deposited color (the half-strength "light" variant).
+          ctx.globalCompositeOperation =
+            groutBlend.kind === "lighter" ? "lighter" : "source-over";
+          ctx.globalAlpha = groutBlend.strength;
+          ctx.fillStyle = fillColor;
+          ctx.fillRect(0, 0, w, h);
+        }
         ctx.restore();
       }
 
