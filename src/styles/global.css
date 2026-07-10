@@ -179,8 +179,8 @@
     position: relative;
     margin: 0 auto;
     grid-template-columns:
-      [bleedstart] minmax(1.5rlh, 1fr)
-      [start] minmax(256px, 720px) [end] minmax(1.5rlh, 1fr) [bleedend];
+      [bleedstart] minmax(2rlh, 1fr)
+      [start] minmax(256px, 720px) [end] minmax(2rlh, 1fr) [bleedend];
     & > * {
       grid-column: start / end;
     }

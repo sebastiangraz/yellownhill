@@ -198,8 +198,8 @@ function RouteComponent() {
       </section>
 
       {/* Areas of Focus */}
-      <section className="bleed fade-parallax">
-        <div className="startend gap-y-2 center py-4 grid container-inline">
+      <section className="bleed">
+        <div className="startend gap-y-2 center py-4 grid fade-parallax container-inline">
           <div className="rows" data-gap="2">
             <span className="badge center">Areas of Focus</span>
             <div
@@ -235,8 +235,8 @@ function RouteComponent() {
       </section>
 
       {/* Contact */}
-      <section className="fade-parallax">
-        <div className="startend py-4 grid">
+      <section className="">
+        <div className="startend py-4 grid fade-parallax">
           <div className="gap-y-2 grid">
             <span className="badge center">Request a Conversation</span>
             <p className="center">Ray Gelbberg · Founder, New York, NY 10022</p>
@@ -298,8 +298,8 @@ function RouteComponent() {
       </section>
 
       {/* Disclaimer */}
-      <section className="bleed fade-parallax">
-        <div className="startend gap-y-1 py-3 grid center small secondary">
+      <section className="bleed">
+        <div className="startend gap-y-1 py-3 grid center small secondary fade-parallax">
           <span className="badge">Disclaimer</span>
           <p>Yellown Hill is a strategic capital platform.</p>
           <p>
