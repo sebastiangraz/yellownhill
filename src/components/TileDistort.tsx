@@ -66,7 +66,7 @@ const DEFAULTS = {
   /** Fill color painted behind the tiles (on top of srcBackdrop). When set and
    *  tileGap > 0, this becomes the color of the gaps ("grout"). Accepts any CSS
    *  color: hex, rgb(a), hsl(a), named colors, or var(--token). Empty = off. */
-  borderColor: "",
+  groutColor: "",
   /** Render the canvas backing store at 2× the device pixel ratio so the source
    *  image is sampled at higher detail (crisper tiles). Costs more pixels/memory. */
   highRes: true,
@@ -181,7 +181,7 @@ export type TileDistortProps = {
   backdropBlur?: number;
   /** Color of the tile gaps, painted behind the tiles (on top of srcBackdrop).
    *  Accepts hex, rgb(a), hsl(a), named colors, or var(--token). */
-  borderColor?: string;
+  groutColor?: string;
   /** Render the canvas at 2× the device pixel ratio for higher-DPI (crisper)
    *  source sampling. */
   highRes?: boolean;
@@ -209,7 +209,7 @@ export function TileDistort({
   animationRange = DEFAULTS.animationRange,
   srcBackdrop = DEFAULTS.srcBackdrop,
   backdropBlur = DEFAULTS.backdropBlur,
-  borderColor = DEFAULTS.borderColor,
+  groutColor = DEFAULTS.groutColor,
   highRes = DEFAULTS.highRes,
 }: TileDistortProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -244,7 +244,7 @@ export function TileDistort({
 
     // Resolve once per effect run so var(--token) is read in the wrap's cascade
     // and we don't touch the DOM every animation frame.
-    const fillColor = borderColor ? resolveColor(borderColor, wrap) : "";
+    const fillColor = groutColor ? resolveColor(groutColor, wrap) : "";
 
     // elapsed === null  → fully settled (final) frame
     // elapsed is ms      → animated frame at that time since start
@@ -304,7 +304,17 @@ export function TileDistort({
           low.height = lh;
           const lctx = low.getContext("2d");
           if (lctx) {
-            lctx.drawImage(img, srcOffX, srcOffY, visibleW, visibleH, 0, 0, lw, lh);
+            lctx.drawImage(
+              img,
+              srcOffX,
+              srcOffY,
+              visibleW,
+              visibleH,
+              0,
+              0,
+              lw,
+              lh,
+            );
             ctx.drawImage(low, 0, 0, lw, lh, 0, 0, w, h);
           }
           // Sharp, in-place blur on top (no scaling).
@@ -499,7 +509,7 @@ export function TileDistort({
     animationRange,
     srcBackdrop,
     backdropBlur,
-    borderColor,
+    groutColor,
     highRes,
   ]);
 

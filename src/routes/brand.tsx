@@ -174,10 +174,10 @@ function RouteComponent() {
   const [src, setSrc] = React.useState<string>(PRESETS[2].src);
   const [config, setConfig] = React.useState<Config>(INITIAL_CONFIG);
   // Grout color is managed separately so it can carry an alpha channel; an
-  // alpha of 0 means "off" (empty borderColor → no grout fill).
+  // alpha of 0 means "off" (empty groutColor → no grout fill).
   const [groutHex, setGroutHex] = React.useState("#000000");
   const [groutAlpha, setGroutAlpha] = React.useState(0.2);
-  const borderColor = groutAlpha > 0 ? toRgba(groutHex, groutAlpha) : "";
+  const groutColor = groutAlpha > 0 ? toRgba(groutHex, groutAlpha) : "";
 
   const set = <K extends keyof Config>(key: K, value: Config[K]) =>
     setConfig((c) => ({ ...c, [key]: value }));
@@ -312,7 +312,7 @@ function RouteComponent() {
                   rotationAmount={360}
                   distortionMode="scatter"
                   srcBackdrop
-                  borderColor="hsla(0, 0%, 0%, 0.2)"
+                  groutColor="hsla(0, 0%, 0%, 0.2)"
                 />
               </div>
               <span className="badge secondary">Example — scatter</span>
@@ -370,7 +370,7 @@ function RouteComponent() {
 
             <div className={styles.generatorBody}>
               <div className={styles.generatorTile}>
-                <TileDistort src={src} {...config} borderColor={borderColor} />
+                <TileDistort src={src} {...config} groutColor={groutColor} />
               </div>
 
               <div className={styles.controls}>
@@ -426,7 +426,7 @@ function RouteComponent() {
                   <span className="badge">
                     Grout color
                     <span className={styles.controlValue}>
-                      {borderColor || "off"}
+                      {groutColor || "off"}
                     </span>
                   </span>
                   <div className={styles.groutRow}>

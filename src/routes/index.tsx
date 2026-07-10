@@ -107,7 +107,7 @@ function RouteComponent() {
           distortionMode="scatter"
           srcBackdrop={true}
           backdropBlur={16}
-          borderColor="hsla(0, 0%, 0%, 0.2)"
+          groutColor="hsla(0, 0%, 0%, 0.2)"
         />
       </div>
       <section className="bleed ">
