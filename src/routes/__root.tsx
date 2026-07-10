@@ -29,7 +29,10 @@ export const Route = createRootRoute({
       { rel: "apple-touch-icon", href: "/favicon.ico" },
     ],
     meta: [
-      { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1.0, maximum-scale=1.0",
+      },
       { title: DEFAULT_TITLE },
       { name: "description", content: DEFAULT_DESCRIPTION },
       { name: "theme-color", content: "#dfdfdc" },
