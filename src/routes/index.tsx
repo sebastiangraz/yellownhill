@@ -80,6 +80,10 @@ function RouteComponent() {
     }
   };
 
+  const statusSuccess = status === "success";
+  const statusError = status === "error";
+  const statusSubmitting = status === "submitting";
+
   return (
     <>
       {/* Hero */}
@@ -195,7 +199,7 @@ function RouteComponent() {
 
       {/* Areas of Focus */}
       <section className="bleed fade-parallax">
-        <div className="startend gap-y-2 center px-4 grid container-inline">
+        <div className="startend gap-y-2 center py-4 grid container-inline">
           <div className="rows" data-gap="2">
             <span className="badge center">Areas of Focus</span>
             <div
@@ -232,7 +236,7 @@ function RouteComponent() {
 
       {/* Contact */}
       <section className="fade-parallax">
-        <div className="startend px-4 grid">
+        <div className="startend py-4 grid">
           <div className="gap-y-2 grid">
             <span className="badge center">Request a Conversation</span>
             <p className="center">Ray Gelbberg · Founder, New York, NY 10022</p>
@@ -271,16 +275,18 @@ function RouteComponent() {
                 rows={4}
                 required
               />
-              <button type="submit" disabled={status === "submitting"}>
-                {status === "submitting" ? "Sending…" : "Send"}
-              </button>
-              {status === "success" && (
-                <p role="status" className="small">
+              {!statusSuccess && !statusError && (
+                <button type="submit" disabled={statusSubmitting}>
+                  {statusSubmitting ? "Sending…" : "Send"}
+                </button>
+              )}
+              {statusSuccess && (
+                <p role="status" className="center py-1">
                   Thank you — your message has been sent.
                 </p>
               )}
-              {status === "error" && (
-                <p role="alert" className="small">
+              {statusError && (
+                <p role="alert" className="center py-1">
                   Something went wrong. Please email{" "}
                   <a href="mailto:ray@yellownhill.com">ray@yellownhill.com</a>{" "}
                   directly.
@@ -293,7 +299,7 @@ function RouteComponent() {
 
       {/* Disclaimer */}
       <section className="bleed fade-parallax">
-        <div className="startend gap-y-1 px-3 grid center small secondary">
+        <div className="startend gap-y-1 py-3 grid center small secondary">
           <span className="badge">Disclaimer</span>
           <p>Yellown Hill is a strategic capital platform.</p>
           <p>
